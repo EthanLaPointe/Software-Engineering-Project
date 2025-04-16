@@ -1,4 +1,4 @@
-gamed\gamedtestproject\App.class
 module-info.class
-gamed\gamedtestproject\PrimaryController.class
-gamed\gamedtestproject\SecondaryController.class
+gamed/gamedtestproject/PrimaryController.class
+gamed/gamedtestproject/SecondaryController.class
+gamed/gamedtestproject/App.class
