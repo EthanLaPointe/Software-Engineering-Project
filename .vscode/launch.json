@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "gamed.Main",
+            "projectName": "gamedapi"
+        },
+        {
+            "type": "java",
             "name": "sqlConnection",
             "request": "launch",
             "mainClass": "gamed.gamedtestproject/gamed.gamedtestproject.sqlConnection",
