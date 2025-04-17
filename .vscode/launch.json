@@ -6,10 +6,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "test",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "test",
-            "projectName": "JDBCTest"
+            "mainClass": "gamed.Main",
+            "projectName": "gamedapi"
         },
         {
             "type": "java",
