@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "JDBCTest"
+        },
+        {
+            "type": "java",
             "name": "sqlConnection",
             "request": "launch",
             "mainClass": "gamed.gamedtestproject/gamed.gamedtestproject.sqlConnection",
