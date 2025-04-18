@@ -14,12 +14,12 @@ public class JDBC {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection
-                    ("jdbc:mysql://localhost:3306/Gamed_db", "root", "Chaser580558");
+                    ("jdbc:mysql://localhost:3306/Gamed", "root", "Chaser580558");
             System.out.println("Successfully connected");
             statement = connection.createStatement();
             
             //Gets all columns from the Game Table and displays them
-            resultSet = statement.executeQuery("Select * from Games");
+            resultSet = statement.executeQuery("Select * from Account");
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -38,9 +38,9 @@ public class JDBC {
             statement.execute(insertString);*/
 
             //Gets all columns and displays based on what the column name/index is
-            resultSet = statement.executeQuery("Select * from Games");
+            resultSet = statement.executeQuery("Select * from Account");
             while (resultSet.next()){
-                String name = resultSet.getString("title");
+                String name = resultSet.getString(2);
                 System.out.println(name);
             }
             statement.close();
