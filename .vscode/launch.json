@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JDBC",
+            "request": "launch",
+            "mainClass": "org.example.JDBC",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "JDBC",
+            "request": "launch",
+            "mainClass": "JDBC",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "AccessTokenRetriever",
+            "request": "launch",
+            "mainClass": "IGDBConnection.AccessTokenRetriever",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "JDBCTest"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "gamed.Main",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "gamed.Main",
