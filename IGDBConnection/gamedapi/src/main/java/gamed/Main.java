@@ -35,6 +35,7 @@ public class Main
 
         IGDBWrapper wrapper = IGDBWrapper.INSTANCE;
         wrapper.setCredentials(clientID, authenticationToken);
+        /*
         APICalypse apicalypse = new APICalypse().fields("*").sort("release_dates.date", Sort.DESCENDING);
         try
         {
@@ -42,14 +43,52 @@ public class Main
 
             for(int i = 0; i < 10; i++)
             {
-                System.out.println("Game " + i + ": " + games.get(i).getName());
+                System.out.println("Game " + i + ": " + games.get(i).getName() + " ID: " + games.get(i).getId());
             }
         } 
         catch(RequestException e) 
         {
             System.out.println("Error");
-        }
+        }*/
 
-        
+        Game game = retrieveGameByID(wrapper, 133236);
+
+        printGameDetails(game);
+    }
+
+    private static Game retrieveGameByID(IGDBWrapper wrapper, int gameID) 
+    {
+        APICalypse apicalypse = new APICalypse().fields("*").where("id = " + gameID);
+        try 
+        {
+            List<Game> games = ProtoRequestKt.games(wrapper, apicalypse);
+            if (games.size() > 0) 
+            {
+                return games.get(0);
+            } 
+            else 
+            {
+                System.out.println("Game not found with ID: " + gameID);
+                return null;
+            }
+        } 
+        catch (RequestException e) 
+        {
+            System.out.println("Error retrieving game: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static void printGameDetails(Game game) 
+    {
+        System.out.println("Game ID: " + game.getId());
+        System.out.println("Name: " + game.getName());
+        System.out.println("Summary: " + game.getSummary());
+        System.out.println("Rating: " + game.getRating());
+        System.out.println("Genres: " + game.getGenresList());
+        System.out.println("Platforms: " + game.getPlatformsList());
+        String image_id = game.getCover().getImageId();
+        String imageURL = ImageBuilderKt.imageBuilder(image_id, ImageSize.SCREENSHOT_HUGE, ImageType.PNG);
+        System.out.println("Cover Image URL: " + imageURL);
     }
 }
