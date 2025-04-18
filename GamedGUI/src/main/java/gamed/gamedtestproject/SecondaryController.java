@@ -2,11 +2,15 @@ package gamed.gamedtestproject;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
+//Controller for the homepage
 public class SecondaryController {
     
     @FXML private ImageView profileButton;
@@ -16,7 +20,7 @@ public class SecondaryController {
     @FXML
     public void initialize() {
         // Set profile image
-        profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.jpg")));
+        profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
         
         // Create game cards for each carousel
         populateFeaturedGames();
@@ -44,10 +48,13 @@ public class SecondaryController {
             // If image not found, use a placeholder
             imageView.setImage(new Image(getClass().getResourceAsStream("/placeholder.png")));
         }
-        
+
         imageView.setFitWidth(150);
         imageView.setFitHeight(200);
         imageView.setPreserveRatio(true);
+
+        VBox.setVgrow(imageView,Priority.ALWAYS);
+        card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
         javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(title);
         
@@ -73,7 +80,23 @@ public class SecondaryController {
     }
     
     private void openGameDetails(String gameTitle) {
-        //TODO will bring you to a game specific page when clicking on a game in the carousel
-        System.out.println("Opening details for: " + gameTitle);
+        try {
+            // Load the FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+            Parent gameView = loader.load();
+
+            // Get the controller
+            IndividualGameController controller = loader.getController();
+
+            // Set the game data (in a real app, you would pass an ID and/or more data)
+            controller.setGameData("game123", gameTitle);
+
+            // Set the new scene
+            Scene scene = App.getScene();
+            scene.setRoot(gameView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading game view: " + e.getMessage());
+        }
     }
 }

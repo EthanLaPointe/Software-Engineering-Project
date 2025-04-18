@@ -1,0 +1,69 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "JDBC",
+            "request": "launch",
+            "mainClass": "org.example.JDBC",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "JDBC",
+            "request": "launch",
+            "mainClass": "JDBC",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "AccessTokenRetriever",
+            "request": "launch",
+            "mainClass": "IGDBConnection.AccessTokenRetriever",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "JDBCTest"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "gamed.Main",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "gamed.Main",
+            "projectName": "gamedapi"
+        },
+        {
+            "type": "java",
+            "name": "sqlConnection",
+            "request": "launch",
+            "mainClass": "gamed.gamedtestproject/gamed.gamedtestproject.sqlConnection",
+            "projectName": "GamedTestProject"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "gamed.gamedtestproject/gamed.gamedtestproject.App",
+            "projectName": "GamedTestProject"
+        },
+        {
+            "type": "jdk",
+            "request": "launch",
+            "name": "Launch Java App"
+        }
+    ]
+}

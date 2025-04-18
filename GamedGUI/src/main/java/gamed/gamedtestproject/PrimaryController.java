@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+//Controller for the login screen
 public class PrimaryController {
     
     @FXML private TextField usernameField;
