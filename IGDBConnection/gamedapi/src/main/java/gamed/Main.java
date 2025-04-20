@@ -16,6 +16,13 @@ import proto.Cover;
 import proto.Game;
 import proto.Search;
 import proto.GameResult;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import java.util.List;
 
@@ -28,54 +35,92 @@ public class Main
         String clientID = "86hpmu9gws96n5ipkekcq715bq77tj";
         String clientSecret = "zhmdic84egb7xi2wfwttuwwvq8uiql";
 
-        TwitchAuthenticator auth = TwitchAuthenticator.INSTANCE;
-        TwitchToken token = auth.requestTwitchToken(clientID, clientSecret);
+        String wishlistFile = "IGDBConnection\\gamedapi\\src\\main\\resources\\Wishlist.csv";
+        String favoritesFile = "IGDBConnection\\gamedapi\\src\\main\\resources\\Favorites.csv";
 
-        String authenticationToken = token.getAccess_token();
+        APIHandler handler = new APIHandler(clientID, clientSecret);
 
-        IGDBWrapper wrapper = IGDBWrapper.INSTANCE;
-        wrapper.setCredentials(clientID, authenticationToken);
-        /*
-        APICalypse apicalypse = new APICalypse().fields("*").sort("release_dates.date", Sort.DESCENDING);
-        try
+        int choice = 0;
+        Scanner scan = new Scanner(System.in);
+
+        while(choice != 6) 
         {
-            List<Game> games = ProtoRequestKt.games(wrapper, apicalypse);
+            choice = 0;
+            System.out.println("Enter your choice: ");
+            System.out.println("1. Enter a game ID to retrieve its details:");
+            System.out.println("2. Retrieve games from wishlist");
+            System.out.println("3. Add games to wishlist");
+            System.out.println("4. Retrieve games from favorites");
+            System.out.println("5. Add games to favorites");
+            System.out.println("6. Exit");
+            choice = scan.nextInt();
 
-            for(int i = 0; i < 10; i++)
+            switch (choice)
             {
-                System.out.println("Game " + i + ": " + games.get(i).getName() + " ID: " + games.get(i).getId());
+                case 1:
+                    System.out.println("Enter the game ID: ");
+                    String gameID = scan.next();
+                    Game game = handler.RetrieveGameByID(gameID);
+                    if (game != null) 
+                    {
+                        printGameDetails(game);
+                        String imageURL = GetImageURL(game);
+                        System.out.println("Image URL: " + imageURL);
+                    }
+                    else
+                    {
+                        System.out.println("Game not found with ID: " + gameID);
+                    }
+                    break;
+                case 2:
+                    System.out.println("Retrieving games from wishlist...");
+                    List<String> wishlistIDs = RetrieveIDList(wishlistFile);
+                    List<Game> wishlist = handler.RetrieveWishlist(wishlistIDs);
+                    for (Game g : wishlist) 
+                    {
+                        System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Enter ID of the game to add to wishlist: ");
+                    String idToAdd = scan.next();
+                    if (handler.RetrieveGameByID(idToAdd) != null) 
+                    {
+                        AddIDToList(wishlistFile, idToAdd);
+                    }
+                    else
+                    {
+                        System.out.println("Game not found with ID: " + idToAdd);
+                    }
+                    break;
+                case 4:
+                    System.out.println("Retrieving games from favorites...");
+                    List<String> favoritesIDs = RetrieveIDList(favoritesFile);
+                    List<Game> favorites = handler.RetrieveWishlist(favoritesIDs);
+                    for (Game g : favorites) 
+                    {
+                        System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
+                    }
+                    break;
+                case 5:
+                    System.out.println("Enter ID of the game to add to favorites: ");
+                    idToAdd = scan.next();
+                    if (handler.RetrieveGameByID(idToAdd) != null) 
+                    {
+                        AddIDToList(favoritesFile, idToAdd);
+                    }
+                    else
+                    {
+                        System.out.println("Game not found with ID: " + idToAdd);
+                    }
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
             }
-        } 
-        catch(RequestException e) 
-        {
-            System.out.println("Error");
-        }*/
-
-        Game game = retrieveGameByID(wrapper, 133236);
-
-        printGameDetails(game);
-    }
-
-    private static Game retrieveGameByID(IGDBWrapper wrapper, int gameID) 
-    {
-        APICalypse apicalypse = new APICalypse().fields("*").where("id = " + gameID);
-        try 
-        {
-            List<Game> games = ProtoRequestKt.games(wrapper, apicalypse);
-            if (games.size() > 0) 
-            {
-                return games.get(0);
-            } 
-            else 
-            {
-                System.out.println("Game not found with ID: " + gameID);
-                return null;
-            }
-        } 
-        catch (RequestException e) 
-        {
-            System.out.println("Error retrieving game: " + e.getMessage());
-            return null;
         }
     }
 
@@ -87,8 +132,50 @@ public class Main
         System.out.println("Rating: " + game.getRating());
         System.out.println("Genres: " + game.getGenresList());
         System.out.println("Platforms: " + game.getPlatformsList());
+    }
+
+    private static String GetImageURL(Game game) 
+    {
         String image_id = game.getCover().getImageId();
         String imageURL = ImageBuilderKt.imageBuilder(image_id, ImageSize.SCREENSHOT_HUGE, ImageType.PNG);
-        System.out.println("Cover Image URL: " + imageURL);
+        return imageURL;
+    }
+
+    private static List<String> RetrieveIDList(String fileName) 
+    {
+        String line = "";
+        String csvSplitBy = ",";
+
+        List<String> gameIDs = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) 
+        {
+            while ((line = br.readLine()) != null) 
+            {
+                String[] data = line.split(csvSplitBy);
+                for (String value : data) 
+                {
+                    gameIDs.add(value);
+                }
+            }
+
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return gameIDs;
+    }
+
+    private static void AddIDToList(String fileName, String gameID) 
+    {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true))) 
+        {
+            bw.write("\n" + gameID);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
     }
 }
