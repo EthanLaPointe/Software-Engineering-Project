@@ -37,34 +37,12 @@ public class App extends Application {
         double width = screenWidth*0.8;
         double height = screenHeight*0.8;
 
-        StackPane root = new StackPane();
-        Image backgroundImage = new Image("background.jpg");
-        
-        //Load background image
-        BackgroundImage bgImage = new BackgroundImage(backgroundImage,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,new BackgroundSize(BackgroundSize.AUTO,BackgroundSize.AUTO,false,false,true,true));
-        
-        //Add Background Image
-        root.setBackground(new Background(bgImage));
-        
-        //Add Logo
-        ImageView logoView = new ImageView(new Image(getClass().getResourceAsStream("/logo.png")));
-        logoView.setFitWidth(screenWidth*0.4);
-        logoView.setPreserveRatio(true);
-        
-        //Position Logo at top of screen
-        StackPane.setAlignment(logoView,Pos.TOP_CENTER);
-        StackPane.setMargin(logoView, new Insets(50,0,0,0));
-        root.getChildren().add(logoView);
-        
-        //Add login field
-        Parent loginUI = loadFXML("primary");
-        root.getChildren().add(loginUI);
+        Parent root = loadFXML("primary");
 
         scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.setTitle("Game'd");
         stage.setMinHeight(800);
-        stage.setMaxHeight(600);
         stage.show();
 
         if(scaleFactor>1){
