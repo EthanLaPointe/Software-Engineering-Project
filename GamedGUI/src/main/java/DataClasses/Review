@@ -1,0 +1,53 @@
+package DataClasses;
+
+public class Review{
+
+    private int reviewID;
+    private int accountID;
+    private int gameID;
+    private int rating;
+    private String reviewText;
+
+    public Review(int reviewID, int accountID, int gameID, int rating, String reviewText){
+        this.reviewID = reviewID;
+        this.accountID=accountID;
+        this.gameID=gameID;
+        this.rating=rating;
+        this.reviewText=reviewText;
+    }
+
+
+    public int getAccountID() {
+        return accountID;
+    }
+    
+
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+    
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+    
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+    
+    public void setReviewText(String reviewText) {
+        this.reviewText=reviewText;
+    }
+}
