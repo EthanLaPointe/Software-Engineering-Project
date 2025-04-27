@@ -5,35 +5,128 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: BLUE;" vgap="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.PrimaryController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="90.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="514.0" minWidth="10.0" prefWidth="460.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-   <children>
-      <Label prefHeight="203.0" prefWidth="577.0" text="Username:">
-         <font>
-            <Font name="Comic Sans MS Bold" size="15.0" />
-         </font></Label>
-      <TextField fx:id="usernameField" promptText="Enter Username" GridPane.columnIndex="1" />
-      <Label prefHeight="185.0" prefWidth="275.0" text="Password:" GridPane.rowIndex="1">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font></Label>
-      <PasswordField fx:id="passwordField" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" onAction="#switchToSecondary" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-   </children>
-</GridPane>
+<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="743.0" prefWidth="1194.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.PrimaryController">
+    <children>
+        <ImageView fx:id="background" fitHeight="743.0" fitWidth="1195.0" pickOnBounds="true" preserveRatio="true" />
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <center>
+                <GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: BLUE;" vgap="10.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="90.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="514.0" minWidth="10.0" prefWidth="460.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <Label prefHeight="203.0" prefWidth="577.0" text="Username:">
+                            <font>
+                                <Font name="Comic Sans MS Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="usernameField" promptText="Enter Username" GridPane.columnIndex="1" />
+                        <Label prefHeight="185.0" prefWidth="275.0" text="Password:" GridPane.rowIndex="1">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <PasswordField fx:id="passwordField" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" onAction="#switchToSecondary" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#showCreateAccountDialog" prefHeight="30.0" prefWidth="150.0" text="Create Account" />
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+            </center>
+            <top>
+                <ImageView fx:id="logo" fitHeight="150.0" fitWidth="381.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+            </top>
+        </BorderPane>
+
+        <!-- Create Account Dialog - Initially not visible -->
+        <VBox fx:id="createAccountDialog" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 10;" visible="false">
+            <children>
+                <Label text="Create New Account" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                </Label>
+                <GridPane hgap="10.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="140.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="280.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Username:" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <Label text="Password:" textFill="WHITE" GridPane.rowIndex="1">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <Label text="Confirm Password:" textFill="WHITE" GridPane.rowIndex="2">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="newUsernameField" promptText="Enter new username" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="newPasswordField" promptText="Enter new password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="confirmPasswordField" promptText="Re-enter password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    </children>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                    </VBox.margin>
+                </GridPane>
+                <Label fx:id="errorMessageLabel" textFill="RED">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#cancelCreateAccount" prefHeight="35.0" prefWidth="120.0" text="Cancel" />
+                        <Button mnemonicParsing="false" onAction="#createAccount" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #4CAF50;" text="Create Account" textFill="WHITE" />
+                    </children>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
+            </padding>
+        </VBox>
+    </children>
+</StackPane>
