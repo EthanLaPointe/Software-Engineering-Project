@@ -2,17 +2,119 @@ package gamed.gamedtestproject;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
-//Controller for the login screen
 public class PrimaryController {
-    
+
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private ImageView logo;
+    @FXML private ImageView background;
+    @FXML private StackPane rootPane;
+
+    // Create Account Dialog Components
+    @FXML private VBox createAccountDialog;
+    @FXML private TextField newUsernameField;
+    @FXML private PasswordField newPasswordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Label errorMessageLabel;
+
+    @FXML
+    public void initialize() {
+        try {
+            // Load background image with error handling
+            Image backgroundImage = new Image(getClass().getResourceAsStream("/background.jpg"));
+            if (backgroundImage.isError()) {
+                System.err.println("Error loading background image: " + backgroundImage.getException());
+            } else {
+                background.setImage(backgroundImage);
+            }
+
+            // Load logo image with error handling
+            Image logoImage = new Image(getClass().getResourceAsStream("/logo.png"));
+            if (logoImage.isError()) {
+                System.err.println("Error loading logo image: " + logoImage.getException());
+            } else {
+                logo.setImage(logoImage);
+            }
+
+            background.fitWidthProperty().bind(rootPane.widthProperty());
+            background.fitHeightProperty().bind(rootPane.heightProperty());
+            background.setPreserveRatio(false);
+
+        } catch (Exception e) {
+            System.err.println("Error initializing controller: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");
+    }
+
+    @FXML
+    private void showCreateAccountDialog() {
+        // Clear previous inputs
+        newUsernameField.clear();
+        newPasswordField.clear();
+        confirmPasswordField.clear();
+        errorMessageLabel.setText("");
+
+        // Show the dialog with fade-in animation
+        createAccountDialog.setOpacity(0);
+        createAccountDialog.setVisible(true);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), createAccountDialog);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+    }
+
+    @FXML
+    private void cancelCreateAccount() {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(300), createAccountDialog);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+        fadeOut.setOnFinished(e -> createAccountDialog.setVisible(false));
+        fadeOut.play();
+    }
+
+    @FXML
+    private void createAccount() {
+        // Get the input values
+        String username = newUsernameField.getText().trim();
+        String password = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        // Validate the input
+        if (username.isEmpty()) {
+            errorMessageLabel.setText("Username cannot be empty");
+            return;
+        }
+
+        if (password.isEmpty()) {
+            errorMessageLabel.setText("Password cannot be empty");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            errorMessageLabel.setText("Passwords do not match");
+            return;
+        }
+
+        // TODO: Add code to actually create the account in a database or file
+        System.out.println("Account created for user: " + username);
+
+        // Close the dialog
+        cancelCreateAccount();
     }
 }
