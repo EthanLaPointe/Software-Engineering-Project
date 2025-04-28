@@ -6,7 +6,8 @@ CREATE TABLE Accounts
 (
 	account_id int auto_increment primary key,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL
+    password VARCHAR(50) NOT NULL,
+    dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE WishLists
