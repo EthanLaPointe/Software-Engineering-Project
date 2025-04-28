@@ -91,12 +91,12 @@ public class PrimaryController {
     }
 
     @FXML
-    private void createAccount() {
+    private void createAccount() throws IOException {
         // Get the input values
         String username = newUsernameField.getText().trim();
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-        Connection connection = null;
+        Connection connection;
 
         // Validate the input
         if (username.isEmpty()) {
@@ -137,5 +137,6 @@ public class PrimaryController {
 
         // Close the dialog
         cancelCreateAccount();
+        switchToSecondary();
     }
 }
