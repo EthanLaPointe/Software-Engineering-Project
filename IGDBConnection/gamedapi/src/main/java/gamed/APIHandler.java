@@ -1,25 +1,15 @@
 package gamed;
 
-import com.api.igdb.request.IGDBWrapper;
-import com.api.igdb.request.TwitchAuthenticator;
-import com.api.igdb.utils.TwitchToken;
-import com.api.igdb.utils.Endpoints;
-import com.api.igdb.apicalypse.APICalypse;
-import com.api.igdb.apicalypse.Sort;
-import com.api.igdb.exceptions.RequestException;
-import com.api.igdb.request.JsonRequestKt;
-import com.api.igdb.request.ProtoRequestKt;
-import com.api.igdb.utils.ImageBuilderKt;
-import com.api.igdb.utils.ImageSize;
-import com.api.igdb.utils.ImageType;
-import proto.Cover;
-import proto.Game;
-import proto.Search;
-import proto.GameResult;
-
 import java.util.List;
 
-import com.api.igdb.*;
+import com.api.igdb.apicalypse.APICalypse;
+import com.api.igdb.exceptions.RequestException;
+import com.api.igdb.request.IGDBWrapper;
+import com.api.igdb.request.ProtoRequestKt;
+import com.api.igdb.request.TwitchAuthenticator;
+import com.api.igdb.utils.TwitchToken;
+
+import proto.Game;
 
 public class APIHandler 
 {

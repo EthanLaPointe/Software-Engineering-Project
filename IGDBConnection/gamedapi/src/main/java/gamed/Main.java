@@ -1,32 +1,19 @@
 package gamed;
 
-import com.api.igdb.request.IGDBWrapper;
-import com.api.igdb.request.TwitchAuthenticator;
-import com.api.igdb.utils.TwitchToken;
-import com.api.igdb.utils.Endpoints;
-import com.api.igdb.apicalypse.APICalypse;
-import com.api.igdb.apicalypse.Sort;
-import com.api.igdb.exceptions.RequestException;
-import com.api.igdb.request.JsonRequestKt;
-import com.api.igdb.request.ProtoRequestKt;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import com.api.igdb.utils.ImageBuilderKt;
 import com.api.igdb.utils.ImageSize;
 import com.api.igdb.utils.ImageType;
-import proto.Cover;
+
 import proto.Game;
-import proto.Search;
-import proto.GameResult;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import java.util.List;
-
-import com.api.igdb.*;
 
 public class Main 
 {
@@ -132,6 +119,7 @@ public class Main
         System.out.println("Rating: " + game.getRating());
         System.out.println("Genres: " + game.getGenresList());
         System.out.println("Platforms: " + game.getPlatformsList());
+        System.out.println("Userscore: " + game.getAggregatedRating());
     }
 
     private static String GetImageURL(Game game) 
