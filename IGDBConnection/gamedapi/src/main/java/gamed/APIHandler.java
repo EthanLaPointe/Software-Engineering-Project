@@ -67,7 +67,7 @@ public class APIHandler
         }
     }
 
-    public List<Game> RetrieveWishlist(List<String> gameIDs) 
+    public List<Game> Retrievelist(List<String> gameIDs) 
     {
         APICalypse apicalypse = new APICalypse().fields("*").where("id = (" + String.join(",", gameIDs.stream().map(String::valueOf).toArray(String[]::new)) + ")");
         try 

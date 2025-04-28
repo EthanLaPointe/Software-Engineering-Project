@@ -75,7 +75,7 @@ public class Main
                 case 2:
                     System.out.println("Retrieving games from wishlist...");
                     List<String> wishlistIDs = RetrieveIDList(wishlistFile);
-                    List<Game> wishlist = handler.RetrieveWishlist(wishlistIDs);
+                    List<Game> wishlist = handler.Retrievelist(wishlistIDs);
                     for (Game g : wishlist) 
                     {
                         System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
@@ -96,7 +96,7 @@ public class Main
                 case 4:
                     System.out.println("Retrieving games from favorites...");
                     List<String> favoritesIDs = RetrieveIDList(favoritesFile);
-                    List<Game> favorites = handler.RetrieveWishlist(favoritesIDs);
+                    List<Game> favorites = handler.Retrievelist(favoritesIDs);
                     for (Game g : favorites) 
                     {
                         System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
