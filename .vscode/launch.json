@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "gamed.gamedtestproject.App",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "JDBC",
             "request": "launch",
             "mainClass": "org.example.JDBC",
