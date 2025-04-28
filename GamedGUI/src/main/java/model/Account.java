@@ -1,14 +1,34 @@
 package model;
 
 public class Account {
+    private int accountID;
     private String username;
     private String password;
-    private String email;
+    private String dateCreated;
 
-    public Account(String username, String password, String email) {
+    public Account(int accountID, String username, String password, String dateCreated) {
+        this.accountID=accountID;
         this.username = username;
         this.password = password;
-        this.email = email;
+        this.dateCreated = dateCreated;
+    }
+
+
+    public String getDateCreated(){
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated){
+        this.dateCreated = dateCreated;
+    }
+
+
+    public int getAccountID(){
+        return accountID;
+    }
+
+    public void setAccountID(int accountID){
+        this.accountID = accountID;
     }
 
     public String getUsername() {
@@ -27,11 +47,4 @@ public class Account {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

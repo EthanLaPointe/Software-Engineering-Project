@@ -1,22 +1,30 @@
 package model;
 
 public class Review {
-    private String reviewerName;
+    private int reviewId;
+    private int gameId;
+    private int accountID;
     private int rating;
-    private String comment;
 
-    public Review(String reviewerName, int rating, String comment) {
-        this.reviewerName = reviewerName;
+
+    public Review(int reviewId, int gameId, int accountID, int rating) {
+        this.reviewId = reviewId;
+        this.gameId = gameId;
+        this.accountID = accountID;
         this.rating = rating;
-        this.comment = comment;
     }
 
-    public String getReviewerName() {
-        return reviewerName;
+    
+    public int getReviewId() {
+        return reviewId;
     }
 
-    public void setReviewerName(String reviewerName) {
-        this.reviewerName = reviewerName;
+    public int getGameId() {
+        return gameId;
+    }
+
+    public int getAccountID() {
+        return accountID;
     }
 
     public int getRating() {
@@ -27,11 +35,10 @@ public class Review {
         this.rating = rating;
     }
 
-    public String getComment() {
-        return comment;
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
     }
 }
