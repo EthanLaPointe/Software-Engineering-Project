@@ -1,6 +1,8 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.sql.*;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -94,24 +96,43 @@ public class PrimaryController {
         String username = newUsernameField.getText().trim();
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+        Connection connection = null;
 
         // Validate the input
         if (username.isEmpty()) {
             errorMessageLabel.setText("Username cannot be empty");
             return;
         }
-
         if (password.isEmpty()) {
             errorMessageLabel.setText("Password cannot be empty");
             return;
         }
-
         if (!password.equals(confirmPassword)) {
             errorMessageLabel.setText("Passwords do not match");
             return;
         }
 
         // TODO: Add code to actually create the account in a database or file
+        connection = DBConnectionManager.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("Select * from Accounts where username = '"  + username + "'");
+            if (rs.next()){
+                errorMessageLabel.setText("An account with that username already exists");
+                return;
+            }
+            String insertString = "insert into accounts (username, password) values (?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertString);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.executeUpdate();
+            statement.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         System.out.println("Account created for user: " + username);
 
         // Close the dialog
