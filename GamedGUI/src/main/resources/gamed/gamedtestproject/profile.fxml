@@ -31,7 +31,7 @@
    <center>
       <HBox maxHeight="1500.0" maxWidth="1500.0" minHeight="1500.0" minWidth="2500.0" prefHeight="1500.0" prefWidth="1500.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox maxHeight="1532.0" prefHeight="1532.0" prefWidth="496.0">
+            <VBox maxHeight="1532.0" prefHeight="1480.0" prefWidth="468.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="272.0" text="My Wishlist" textAlignment="CENTER" />
                   <ScrollPane prefHeight="1178.0" prefWidth="496.0">
@@ -40,25 +40,25 @@
                      </content></ScrollPane>
                </children>
             </VBox>
-            <VBox maxHeight="1516.0" prefHeight="1516.0" prefWidth="606.0">
+            <VBox maxHeight="1516.0" prefHeight="1480.0" prefWidth="532.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="287.0" text="My Favorites" />
-                  <ScrollPane prefHeight="1180.0" prefWidth="606.0">
+                  <ScrollPane prefHeight="1180.0" prefWidth="490.0">
                      <content>
-                        <VBox fx:id="favoritesContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="562.0" />
+                        <VBox fx:id="favoritesContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="428.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
-            <VBox maxHeight="1538.0" prefHeight="1538.0" prefWidth="623.0">
+            <VBox maxHeight="1538.0" prefHeight="1480.0" prefWidth="496.0">
                <children>
                   <Label prefHeight="20.0" prefWidth="397.0" text="My Reviews" textAlignment="CENTER" />
                   <ScrollPane prefHeight="1184.0" prefWidth="623.0">
                      <content>
-                        <VBox fx:id="reviewsContainer" maxHeight="1626.0" prefHeight="1469.0" prefWidth="591.0" />
+                        <VBox fx:id="reviewsContainer" maxHeight="1626.0" prefHeight="1469.0" prefWidth="526.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
-            <HBox prefHeight="1061.0" prefWidth="458.0">
+            <HBox prefHeight="1480.0" prefWidth="472.0">
                <children>
                   <Label text="My Profile" />
                </children>
