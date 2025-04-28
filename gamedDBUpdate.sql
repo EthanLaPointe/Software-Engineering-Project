@@ -31,13 +31,5 @@ CREATE TABLE Reviews
     game_id INT,
 	account_id INT,
     rating INT NOT NULL,
-    review_text TEXT
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
-);
-
-CREATE TABLE profile_images
-(
-    account_id INT,
-    profile_image BLOB,
-    FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );

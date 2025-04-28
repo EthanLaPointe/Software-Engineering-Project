@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,12 +17,20 @@ public class SecondaryController {
     @FXML private ImageView profileButton;
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
+    @FXML private ComboBox searchCriteria;
+    @FXML private ImageView logoImage;
     
     @FXML
     public void initialize() {
         // Set profile image
         profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
-        
+
+        logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
+
+        searchCriteria.getItems().addAll("Name","Genre","ID","Platform");
+        searchCriteria.setValue("Name");
+
+        featuredGamesContainer.setStyle("-fx-background-color: #222222;");
         // Create game cards for each carousel
         populateFeaturedGames();
     }
@@ -39,7 +48,8 @@ public class SecondaryController {
     
     private VBox createGameCard(String title, String imagePath) {
         VBox card = new VBox(10);
-        card.setPrefWidth(150);
+        card.setPrefWidth(200);
+        card.setStyle("-fx-background-color: #444444; -fx-padding: 10; -fx-background-radius: 5;");
         
         ImageView imageView = new ImageView();
         try {
@@ -49,19 +59,28 @@ public class SecondaryController {
             imageView.setImage(new Image(getClass().getResourceAsStream("/placeholder.png")));
         }
 
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(200);
+        imageView.setFitWidth(180);
+        imageView.setFitHeight(240);
         imageView.setPreserveRatio(true);
 
         VBox.setVgrow(imageView,Priority.ALWAYS);
         card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
         javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(title);
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
         
         card.getChildren().addAll(imageView, titleLabel);
         
         // Add click event
         card.setOnMouseClicked(event -> openGameDetails(title));
+
+        //Make cards move when moused over
+        card.setOnMouseEntered(e -> {
+            card.setStyle("-fx-background-color: #555555; -fx-padding: 10; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);");
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle("-fx-background-color: #444444; -fx-padding: 10; -fx-background-radius: 5;");
+        });
         
         return card;
     }
@@ -72,11 +91,35 @@ public class SecondaryController {
         // Navigate to profile page
         App.setRoot("profile");
     }
-    
+
     @FXML
     private void searchGames() {
-        //TODO add logic for searching and switching to game specific page
         String query = searchField.getText();
+        String criteria = searchCriteria.toString(); //Not sure if this will work
+
+        // Logic for searching by different criteria
+        switch (query) {
+            case "Name":
+                // Search by name
+                System.out.println("Searching by name: " + query);
+                break;
+            case "Genre":
+                // Search by genre
+                System.out.println("Searching by genre: " + query);
+                break;
+            case "ID":
+                // Search by ID
+                System.out.println("Searching by ID: " + query);
+                break;
+            case "Platform":
+                // Search by platform
+                System.out.println("Searching by platform: " + query);
+                break;
+            default:
+                // Default search
+                System.out.println("Default search: " + query);
+                break;
+        }
     }
     
     private void openGameDetails(String gameTitle) {

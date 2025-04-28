@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -29,35 +29,40 @@
       </HBox>
    </top>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="369.0" prefWidth="682.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="280.0" prefWidth="200.0">
+            <VBox maxHeight="400.0" prefHeight="295.0" prefWidth="200.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="272.0" text="My Wishlist" textAlignment="CENTER" />
-                  <ScrollPane prefHeight="282.0" prefWidth="187.0">
+                  <ScrollPane prefHeight="385.0" prefWidth="200.0">
                      <content>
-                        <VBox fx:id="wishlistContainer" prefHeight="262.0" prefWidth="185.0" />
+                        <VBox fx:id="wishlistContainer" maxHeight="500.0" prefHeight="500.0" prefWidth="185.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
-            <VBox prefHeight="280.0" prefWidth="200.0">
+            <VBox maxHeight="400.0" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="287.0" text="My Favorites" />
-                  <ScrollPane prefHeight="346.0" prefWidth="187.0">
+                  <ScrollPane prefHeight="388.0" prefWidth="200.0">
                      <content>
-                        <VBox fx:id="favoritesContainer" prefHeight="261.0" prefWidth="186.0" />
+                        <VBox fx:id="favoritesContainer" maxHeight="700.0" prefHeight="500.0" prefWidth="186.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
-            <VBox prefHeight="280.0" prefWidth="200.0">
+            <VBox maxHeight="400.0" prefHeight="280.0" prefWidth="200.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="397.0" text="My Reviews" textAlignment="CENTER" />
                   <ScrollPane prefHeight="413.0" prefWidth="187.0">
                      <content>
-                        <VBox fx:id="reviewsContainer" prefHeight="262.0" prefWidth="185.0" />
+                        <VBox fx:id="reviewsContainer" maxHeight="500.0" prefHeight="500.0" prefWidth="185.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="My Profile" />
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
