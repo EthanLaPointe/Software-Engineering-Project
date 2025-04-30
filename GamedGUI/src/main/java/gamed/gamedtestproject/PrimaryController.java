@@ -17,7 +17,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+
+
 public class PrimaryController {
+    
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -131,10 +135,12 @@ public class PrimaryController {
                 errorMessageLabel.setText("An account with that username already exists");
                 return;
             }
+            String hashedPassword = jbcrypt.hashPassword(confirmPassword);
+
             String insertString = "insert into accounts (username, password) values (?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertString);
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, hashedPassword);
             preparedStatement.executeUpdate();
             statement.close();
             preparedStatement.close();
