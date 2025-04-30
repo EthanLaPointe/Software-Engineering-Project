@@ -29,6 +29,7 @@ public class ProfileController {
         loadWishlist();
         loadFavorites();
         loadReviews();
+        loadProfileData();
     }
     private void loadWishlist() { 
         try {
@@ -80,7 +81,7 @@ public class ProfileController {
         }
         
     }
-    private void getProfileData() {
+    private void loadProfileData() {
         try {
             // Fetch profile data from the database
             DBConnectionManager.getConnection();
@@ -93,10 +94,12 @@ public class ProfileController {
 
                 // Set profile data in the UI
                 Label usernameLabel = new Label(username);
-                Label emailLabel = new Label(email);
+                
+                Label DateCreatedLabel = new Label("Date Created: " + DateCreated);
+    
                 ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath)));
 
-                profileContainer.getChildren().addAll(usernameLabel, emailLabel, profileImageView);
+                profileContainer.getChildren().addAll(usernameLabel, DateCreatedLabel, profileImageView);
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());

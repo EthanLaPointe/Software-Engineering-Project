@@ -7,12 +7,8 @@ CREATE TABLE Accounts
 	account_id int auto_increment primary key,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
-    date_created DATETIME NOT NULL
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
-ALTER TABLE Accounts
-ADD COLUMN date_created DATETIME NOT NULL;
-
 
 CREATE TABLE WishLists
 (
