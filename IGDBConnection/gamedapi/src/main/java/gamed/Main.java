@@ -15,6 +15,8 @@ import com.api.igdb.utils.ImageType;
 
 import proto.Game;
 
+import java.sql.*;
+
 public class Main 
 {
     public static void main(String[] args) 
@@ -39,7 +41,9 @@ public class Main
             System.out.println("3. Add games to wishlist");
             System.out.println("4. Retrieve games from favorites");
             System.out.println("5. Add games to favorites");
-            System.out.println("6. Exit");
+            System.out.println("6. DB TEST");
+            System.out.println("7. Exit");
+
             choice = scan.nextInt();
 
             switch (choice)
@@ -102,8 +106,37 @@ public class Main
                     }
                     break;
                 case 6:
-                    System.out.println("Exiting...");
+                    Connection connection = createConnection();
+                    ResultSet dbWishlist = retrieveWishlistDB(connection);
+                    ArrayList<String> dbWishlistIDs = null;
+                    try 
+                    {
+                        dbWishlistIDs = resToArr(dbWishlist);
+                    } 
+                    catch (SQLException e) 
+                    {
+                        e.printStackTrace();
+                    }
+                    
+                    for (String id : dbWishlistIDs) 
+                    {
+                        Game wishlistGame = handler.RetrieveGameByID(id);
+                        if (wishlistGame != null) 
+                        {
+                            printGameDetails(wishlistGame);
+                        }
+                        else
+                        {
+                            System.out.println("Game not found with ID: " + id);
+                        }
+                    }
+                    
+                    //System.out.println("Wishlist IDs from DB: " + dbWishlistIDs);
                     break;
+                case 7:
+                    System.out.println("Exiting...");
+                    scan.close();
+                    return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
@@ -165,5 +198,63 @@ public class Main
         {
             e.printStackTrace();
         }
+    }
+
+    public static  Connection createConnection()
+    {
+        Connection connection;
+        try 
+        {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection
+                    ("jdbc:mysql://localhost:3306/gamed_db", "root", "Raznian86");
+            System.out.println("Successfully connected");
+            return connection;
+        } 
+        catch (ClassNotFoundException | SQLException e) 
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ResultSet retrieveWishlistDB(Connection connection)
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT game_id FROM WishLists");
+            return resultSet;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String resToString(ResultSet resultSet) throws SQLException
+    {
+        String result = "";
+        int columnCount = resultSet.getMetaData().getColumnCount();
+
+        while (resultSet.next()) 
+        {
+            for (int i = 1; i <= columnCount; i++) 
+            {
+                result += resultSet.getString(i) + " ";
+            }
+            result += "\n";
+        }
+        return result;
+    }
+
+    public static ArrayList<String> resToArr(ResultSet resultSet) throws SQLException
+    {
+        ArrayList<String> ids = new ArrayList<>();
+        while (resultSet.next()) 
+        {
+            ids.add(resultSet.getString("game_id"));
+        }
+        return ids;
     }
 }

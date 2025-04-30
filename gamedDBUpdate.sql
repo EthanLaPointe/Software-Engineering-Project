@@ -32,5 +32,13 @@ CREATE TABLE Reviews
     game_id INT,
 	account_id INT,
     rating INT NOT NULL,
+    contents LONGTEXT, 
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );
+
+INSERT INTO WishLists (game_id) VALUES 
+(133236),
+(14593),
+(76882),
+(26758),
+(11133);
