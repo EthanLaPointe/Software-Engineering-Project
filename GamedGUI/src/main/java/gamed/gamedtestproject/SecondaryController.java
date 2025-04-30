@@ -17,7 +17,7 @@ public class SecondaryController {
     @FXML private ImageView profileButton;
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
-    @FXML private ComboBox searchCriteria;
+    @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
     
     @FXML
@@ -95,10 +95,10 @@ public class SecondaryController {
     @FXML
     private void searchGames() {
         String query = searchField.getText();
-        String criteria = searchCriteria.toString(); //Not sure if this will work
+        String criteria = searchCriteria.getValue();
 
         // Logic for searching by different criteria
-        switch (query) {
+        switch (criteria) {
             case "Name":
                 // Search by name
                 System.out.println("Searching by name: " + query);
