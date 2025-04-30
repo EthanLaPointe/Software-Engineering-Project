@@ -5,6 +5,11 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +19,6 @@ import com.api.igdb.utils.ImageSize;
 import com.api.igdb.utils.ImageType;
 
 import proto.Game;
-
-import java.sql.*;
 
 public class Main 
 {
@@ -28,6 +31,7 @@ public class Main
         String favoritesFile = "IGDBConnection\\gamedapi\\src\\main\\resources\\Favorites.csv";
 
         APIHandler handler = new APIHandler(clientID, clientSecret);
+        DBConnector dbConnector = DBConnector.INSTANCE;
 
         int choice = 0;
         Scanner scan = new Scanner(System.in);
@@ -43,6 +47,7 @@ public class Main
             System.out.println("5. Add games to favorites");
             System.out.println("6. DB TEST");
             System.out.println("7. Exit");
+            System.out.println("8. Test DB connection");
 
             choice = scan.nextInt();
 
@@ -137,6 +142,20 @@ public class Main
                     System.out.println("Exiting...");
                     scan.close();
                     return;
+                case 8:
+                    ArrayList<String> wishIDs = null;
+                    System.out.println("Enter user ID: ");
+                    int userID = scan.nextInt();
+                    
+                    try 
+                    {
+                        wishIDs = dbConnector.retrieveUserWishlist(userID);
+                    } 
+                    catch (SQLException e) 
+                    {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Wishlist IDs from DB: " + wishIDs);
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
@@ -230,22 +249,6 @@ public class Main
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static String resToString(ResultSet resultSet) throws SQLException
-    {
-        String result = "";
-        int columnCount = resultSet.getMetaData().getColumnCount();
-
-        while (resultSet.next()) 
-        {
-            for (int i = 1; i <= columnCount; i++) 
-            {
-                result += resultSet.getString(i) + " ";
-            }
-            result += "\n";
-        }
-        return result;
     }
 
     public static ArrayList<String> resToArr(ResultSet resultSet) throws SQLException
