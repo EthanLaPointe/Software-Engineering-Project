@@ -23,6 +23,7 @@ public class ProfileController {
     @FXML private VBox profileContainer;
     Statement statement;
     ResultSet resultSet;
+    
 
 
     public void initialize() {
@@ -46,6 +47,9 @@ public class ProfileController {
             System.err.println("Error executing query: " + e.getMessage());
         }
        
+        for (int i = 0; i < wishlistContainer.getChildren().size(); i++) {
+            wishlistContainer.getChildren().add(createGameCard("Game Title", "/path/to/image.jpg"));
+        }
     }
 
     private void loadFavorites() {
@@ -62,6 +66,7 @@ public class ProfileController {
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
+        
     }
 
     private void loadReviews() {
@@ -89,22 +94,14 @@ public class ProfileController {
             resultSet = statement.executeQuery("SELECT * FROM Accounts");
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
-                String DateCreated = resultSet.getString("dateCreated");
+                String dateCreated = resultSet.getString("dateCreated");
                 String profileImagePath = resultSet.getString("profile_image_path");
-
-                // Set profile data in the UI
-                Label usernameLabel = new Label(username);
-                
-                Label DateCreatedLabel = new Label("Date Created: " + DateCreated);
-    
-                ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath)));
-
-                profileContainer.getChildren().addAll(usernameLabel, DateCreatedLabel, profileImageView);
+                profileContainer.getChildren().add(createProfileData(username, dateCreated, profileImagePath));
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
-    
+        
         
     }
 
@@ -162,6 +159,19 @@ public class ProfileController {
 
         reviewBox.getChildren().addAll(titleLabel, starsBox, commentLabel, viewGameLink);
         reviewsContainer.getChildren().add(reviewBox);
+    }
+
+    private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
+
+        VBox profileBox = new VBox(10);
+        profileBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;"); 
+
+        Label usernameLabel = new Label("Username: " + username);
+        Label dateCreatedLabel = new Label("Date Created: " + dateCreated);
+        ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath))); 
+
+        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
+        return profileBox;
     }
 
     private void openGameDetails(String gameTitle) {
