@@ -27,9 +27,8 @@ public class ProfileController {
 
     public void initialize() {
         loadWishlist();
-
-        //loadFavorites();
-        //loadReviews();
+        loadFavorites();
+        loadReviews();
     }
     private void loadWishlist() { 
         try {
@@ -53,7 +52,7 @@ public class ProfileController {
             // Fetch favorite games from the database
             DBConnectionManager.getConnection();
             statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Favorites");
+            resultSet = statement.executeQuery("SELECT * FROM FavGames");
             while (resultSet.next()) {
                 String gameTitle = resultSet.getString("game_title");
                 String imagePath = resultSet.getString("image_path");
