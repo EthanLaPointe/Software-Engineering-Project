@@ -115,6 +115,13 @@ public class PrimaryController {
             return;
         }
 
+        if (password.length() < 8 && !containsSpecialCharacter(password) && !containsUpperCase(password)){
+            errorMessageLabel.setText("Passwords must contain a special character(!,@,#,$,%,&,*), " +
+                    "be at least 8 characters in length, and contain an uppercase letter");
+            return;
+        }
+
+
         // TODO: Add code to actually create the account in a database or file
         connection = DBConnectionManager.getConnection();
         try {
@@ -140,5 +147,24 @@ public class PrimaryController {
 
         // Close the dialog
         cancelCreateAccount();
+    }
+
+    public boolean containsSpecialCharacter(String str){
+        return str.contains("*") || str.contains("!")
+                || str.contains("@") || str.contains("#")
+                || str.contains("$") || str.contains("%")
+                || str.contains("&");
+    }
+
+    public boolean containsUpperCase(String str){
+        boolean contains = false;
+        for(int i = 0; i < str.length(); i++){
+            char ch = str.charAt(i);
+            if(Character.isUpperCase(ch)){
+                contains = true;
+                break;
+            }
+        }
+        return contains;
     }
 }
