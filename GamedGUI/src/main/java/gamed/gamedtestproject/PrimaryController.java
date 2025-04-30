@@ -119,7 +119,7 @@ public class PrimaryController {
             return;
         }
 
-        if (password.length() < 8 && !containsSpecialCharacter(password) && !containsUpperCase(password)){
+        if (password.length() <= 8 && !containsSpecialCharacter(password) && !containsUpperCase(password)){
             errorMessageLabel.setText("Passwords must contain a special character(!,@,#,$,%,&,*), " +
                     "be at least 8 characters in length, and contain an uppercase letter");
             return;
@@ -128,7 +128,7 @@ public class PrimaryController {
 
         // TODO: Add code to actually create the account in a database or file
         connection = DBConnectionManager.getConnection();
-        try {
+        try {  
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("Select * from Accounts where username = '"  + username + "'");
             if (rs.next()){
