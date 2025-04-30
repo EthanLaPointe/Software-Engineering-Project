@@ -5,8 +5,8 @@ USE Gamed_db;
 CREATE TABLE Accounts
 (
 	account_id int auto_increment primary key,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
     dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -32,5 +32,6 @@ CREATE TABLE Reviews
     game_id INT,
 	account_id INT,
     rating INT NOT NULL,
+    review_text VARCHAR(500),
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );

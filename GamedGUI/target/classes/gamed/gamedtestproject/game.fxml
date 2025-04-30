@@ -5,12 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.IndividualGameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.IndividualGameController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
          <padding>
@@ -18,7 +19,8 @@
          </padding>
          <children>
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="25.0" prefWidth="97.0" text="← Back" />
-            <Label fx:id="gameTitle" prefHeight="60.0" prefWidth="363.0" text="gametext">
+            <ImageView fitHeight="60.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url('logo.png');" />
+            <Label fx:id="gameTitle" contentDisplay="CENTER" prefHeight="60.0" prefWidth="363.0" style="-fx-background-color: #222222;" text="gametext" textAlignment="CENTER" textFill="WHITE" underline="true">
                <font>
                   <Font size="37.0" />
                </font>
@@ -27,13 +29,13 @@
       </HBox>
    </top>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #222222;" BorderPane.alignment="CENTER">
          <content>
-            <VBox prefHeight="300.0" prefWidth="585.0">
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="585.0" style="-fx-background-color: #222222;">
                <children>
-                  <HBox fx:id="screenshotsContainer" prefHeight="155.0" prefWidth="585.0" />
-                  <TextArea fx:id="gameDescription" prefHeight="80.0" prefWidth="585.0" />
-                  <VBox fx:id="reviewsContainer" prefHeight="95.0" prefWidth="585.0" />
+                  <HBox fx:id="screenshotsContainer" prefHeight="155.0" prefWidth="585.0" style="-fx-background-color: #222222;" />
+                  <TextArea fx:id="gameDescription" editable="false" prefHeight="80.0" prefWidth="585.0" style="-fx-background-color: #222222;" />
+                  <VBox fx:id="reviewsContainer" prefHeight="95.0" prefWidth="585.0" style="-fx-background-color: #222222;" />
                </children>
             </VBox>
          </content>
