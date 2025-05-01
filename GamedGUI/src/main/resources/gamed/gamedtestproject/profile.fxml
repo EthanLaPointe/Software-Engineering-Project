@@ -4,28 +4,30 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
    <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="22.0" prefWidth="73.0" text="← Back" />
-            <ImageView fitHeight="76.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="/logo.png" />
-               </image>
-            </ImageView>
-            <Label prefHeight="72.0" prefWidth="466.0" style="-fx-background-color: #222222;" text="My Profile" textAlignment="CENTER" textFill="WHITE">
+            <ImageView fx:id="logoImage" fitHeight="76.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <Label prefHeight="72.0" prefWidth="350.0" style="-fx-background-color: #222222;" text="My Profile" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="41.0" />
                </font>
             </Label>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #ff5555;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -36,48 +38,104 @@
       </HBox>
    </top>
    <center>
-      <HBox maxHeight="1500.0" maxWidth="1500.0" minHeight="1500.0" minWidth="2500.0" prefHeight="1500.0" prefWidth="1500.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox maxHeight="1532.0" prefHeight="1480.0" prefWidth="468.0">
+            <!-- User Profile Section -->
+            <VBox fx:id="profileDetailsContainer" maxWidth="700.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: rgba(34, 34, 34, 0.8); -fx-background-radius: 10;">
                <children>
-                  <Label prefHeight="17.0" prefWidth="272.0" style="-fx-background-color: #222222;" text="My Wishlist" textAlignment="CENTER" textFill="WHITE" />
-                  <ScrollPane prefHeight="1178.0" prefWidth="496.0">
-                     <content>
-                        <VBox fx:id="wishlistContainer" />
-                     </content></ScrollPane>
+                  <HBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="264.0" spacing="20.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="130.0" prefWidth="150.0">
+                           <children>
+                              <ImageView fx:id="profileImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                              <Button mnemonicParsing="false" onAction="#changeProfilePicture" text="Change Picture" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="130.0" prefWidth="500.0" spacing="10.0">
+                           <children>
+                              <Label fx:id="usernameLabel" text="Username: " textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dateCreatedLabel" text="Date Created: " textFill="WHITE">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </padding>
+                  </HBox>
                </children>
             </VBox>
-            <VBox maxHeight="1516.0" prefHeight="1480.0" prefWidth="532.0">
+
+            <!-- Game Lists Section -->
+            <HBox alignment="CENTER" maxHeight="1500.0" maxWidth="2500.0" prefHeight="300.0" prefWidth="750.0" spacing="20.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="287.0" style="-fx-background-color: #222222;" text="My Favorites" textFill="WHITE" />
-                  <ScrollPane prefHeight="1180.0" prefWidth="490.0">
-                     <content>
-                        <VBox fx:id="favoritesContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="428.0" />
-                     </content></ScrollPane>
+                  <VBox prefHeight="300.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #222222;" text="My Wishlist" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="270.0" prefWidth="300.0">
+                           <content>
+                              <VBox fx:id="wishlistContainer" prefWidth="290.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="300.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #222222;" text="My Favorites" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="270.0" prefWidth="300.0">
+                           <content>
+                              <VBox fx:id="favoritesContainer" prefWidth="290.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="300.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #222222;" text="My Reviews" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="270.0" prefWidth="300.0">
+                           <content>
+                              <VBox fx:id="reviewsContainer" prefWidth="290.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-            <VBox maxHeight="1538.0" prefHeight="1480.0" prefWidth="496.0">
-               <children>
-                  <Label prefHeight="20.0" prefWidth="397.0" style="-fx-background-color: #222222;" text="My Reviews" textAlignment="CENTER" textFill="WHITE" />
-                  <ScrollPane prefHeight="1184.0" prefWidth="623.0">
-                     <content>
-                        <VBox fx:id="reviewsContainer" maxHeight="1626.0" prefHeight="1469.0" prefWidth="526.0" />
-                     </content></ScrollPane>
-               </children>
-            </VBox>
-            <VBox prefHeight="1480.0" prefWidth="472.0">
-               <children>
-                  <Label style="-fx-background-color: #222222;" text="My Profile" textFill="WHITE" />
-                  <ScrollPane prefHeight="1180.0" prefWidth="490.0">
-                     <content>
-                        <VBox fx:id="profileContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="428.0" />
-                     </content></ScrollPane>
-               </children>
-            </VBox>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
          </children>
          <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
-      </HBox>
+      </VBox>
    </center>
 </BorderPane>

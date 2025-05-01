@@ -3,6 +3,8 @@ package gamed.gamedtestproject;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Label; // Ensure Label is imported
 import java.sql.Connection;
@@ -21,17 +23,41 @@ public class ProfileController {
     @FXML private VBox favoritesContainer;
     @FXML private VBox reviewsContainer;
     @FXML private VBox profileContainer;
+    @FXML private ImageView logoImage;
+    @FXML private ImageView profileImage;
+    @FXML private Label usernameLabel;
+    @FXML private Label dateCreatedLabel;
+
     Statement statement;
     ResultSet resultSet;
     
 
 
     public void initialize() {
+        logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
+
+        try {
+            profileImage.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+        } catch (Exception e) {
+            System.err.println("Error loading default profile image: " + e.getMessage());
+        }
         loadWishlist();
         loadFavorites();
         loadReviews();
         loadProfileData();
     }
+
+    @FXML
+    private void logout() throws IOException {
+        //TODO add logic for actually logging out user
+        App.setRoot("primary");
+    }
+
+    @FXML
+    private void changeProfilePicture() throws IOException{
+        //TODO add logic for uploading images to database
+    }
+
     private void loadWishlist() { 
         try {
             // Fetch wishlist data from the database
@@ -94,8 +120,11 @@ public class ProfileController {
             resultSet = statement.executeQuery("SELECT * FROM Accounts");
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
+                usernameLabel.setText(username);
                 String dateCreated = resultSet.getString("dateCreated");
+                dateCreatedLabel.setText(dateCreated);
                 String profileImagePath = resultSet.getString("profile_image_path");
+                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
                 profileContainer.getChildren().add(createProfileData(username, dateCreated, profileImagePath));
             }
         } catch (SQLException e) {
@@ -187,5 +216,12 @@ public class ProfileController {
         App.setRoot("secondary");
     }
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
     
 }
