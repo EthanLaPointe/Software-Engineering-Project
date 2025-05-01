@@ -5,7 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -103,7 +104,7 @@ public class PrimaryController {
         String username = newUsernameField.getText().trim();
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-        Connection connection = null;
+        //Connection connection = null;
 
         // Validate the input
         if (username.isEmpty()) {
@@ -127,33 +128,39 @@ public class PrimaryController {
 
 
         // TODO: Add code to actually create the account in a database or file
-        connection = DBConnectionManager.getConnection();
-        try {  
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("Select * from Accounts where username = '"  + username + "'");
+        //connection = DBConnectionManager.getConnection();
+        try (Connection connection = DBConnectionManager.getConnection();
+            PreparedStatement checkStmt  = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?"))
+            {
+                checkStmt.setString(1,username);
+                ResultSet rs = checkStmt.executeQuery();  
+            //Statement statement = connection.createStatement();
+            //ResultSet rs = statement.executeQuery("Select * from Accounts where username = '"  + username + "'");
             if (rs.next()){
                 errorMessageLabel.setText("An account with that username already exists");
                 return;
             }
+            //hashing the password
             String hashedPassword = jbcrypt.hashPassword(confirmPassword);
 
-            String insertString = "insert into accounts (username, password) values (?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertString);
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, hashedPassword);
-            preparedStatement.executeUpdate();
-            statement.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            try(PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO Accounts (username, password, date_created) VALUES (?, ?, ?)")){
+                insertStmt.setString(1,username);
+                insertStmt.setString(2,password);
+                //need to add date of creation
+                insertStmt.setTimestamp(3,Timestamp.valueOf(LocalDateTime.now()));
+                insertStmt.executeUpdate();
+            }
 
 
         System.out.println("Account created for user: " + username);
 
         // Close the dialog
         cancelCreateAccount();
+    } catch(SQLException e){
+        e.printStackTrace();
+        errorMessageLabel.setText("database error occurred!");
     }
+}
 
     public boolean containsSpecialCharacter(String str){
         return str.contains("*") || str.contains("!")
@@ -173,4 +180,44 @@ public class PrimaryController {
         }
         return contains;
     }
+
+    //login validation
+    @FXML
+    private void handleLogin() {
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText();
+    
+        if (username.isEmpty() || password.isEmpty()) {
+            errorMessageLabel.setText("Username and password are required.");
+            return;
+        }
+    
+        //get password from database
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement stmt = connection.prepareStatement("SELECT password FROM accounts WHERE username = ?")) {
+    
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                String storedHashedPassword = rs.getString("password");
+    
+                if (jbcrypt.checkPassword(password, storedHashedPassword)) {
+                    System.out.println("Login successful for user: " + username);
+                    //Go to secondary???
+                    App.setRoot("secondary");
+                    
+                } else {
+                    errorMessageLabel.setText("Invalid username or password.");
+                }
+            } else {
+                errorMessageLabel.setText("Invalid username or password.");
+            }
+    
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            errorMessageLabel.setText("Database error during login.");
+        }
+    }
+
 }
