@@ -126,7 +126,6 @@ public class PrimaryController {
             return;
         }
 
-
     
         //connection = DBConnectionManager.getConnection();
         try (Connection connection = DBConnectionManager.getConnection();
@@ -151,7 +150,7 @@ public class PrimaryController {
                 insertStmt.executeUpdate();
             }
 
-
+ 
         System.out.println("Account created for user: " + username);
 
         // Close the dialog
