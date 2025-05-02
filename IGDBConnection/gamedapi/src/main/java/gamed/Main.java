@@ -11,14 +11,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import com.api.igdb.apicalypse.APICalypse;
+import com.api.igdb.request.ProtoRequestKt;
 import com.api.igdb.utils.ImageBuilderKt;
 import com.api.igdb.utils.ImageSize;
 import com.api.igdb.utils.ImageType;
 
 import proto.Game;
+import proto.Genre;
+import proto.Platform;
 
 public class Main 
 {
@@ -156,8 +161,44 @@ public class Main
                         e.printStackTrace();
                     }
                     System.out.println("Wishlist IDs from DB: " + wishIDs);
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                case 9:
+                    ArrayList<String> genreIDs = handler.RetrieveGameGenres("7346");
+                    System.out.println(genreIDs);
+                    break;
+                case 10:
+                    System.out.println("Enter game ID: ");
+                    gameID = scan.next();
+                    game = handler.RetrieveGameByID(gameID);
+
+                    ArrayList<String> genres = handler.RetrieveGameGenres(game);
+                    System.out.println(genres);
+                    break;
+                case 11:
+                    System.out.println("Enter game name: ");
+                    String gameName = scan.next();
+                    List<Game> searchResults = handler.SearchGameByName(gameName);
+                    if (searchResults != null) 
+                    {
+                        for(Game g : searchResults) 
+                        {
+                            System.out.println("Name: " + g.getName());
+                        }
+                    }
+                    break;
+                case 12:
+                    System.out.println("retrieving all genres...");
+                    HashMap<Long, String> allGenres = handler.getAllGenres();
+                    for (Long id : allGenres.keySet()) 
+                    {
+                        System.out.println("ID: " + id + ", Name: " + allGenres.get(id));
+                    }
+                    break;
+                case 13:
+                    System.out.println("Enter genre ID: ");
+                    Long genreID = scan.nextLong();
+                    String genreName = handler.getGenreByID(genreID);
+
+                    System.out.println("Genre name: " + genreName);
                     break;
             }
         }

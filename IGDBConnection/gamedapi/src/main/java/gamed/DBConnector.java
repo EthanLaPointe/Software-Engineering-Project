@@ -82,5 +82,46 @@ public enum DBConnector
         }
     }
 
+    public ArrayList<String> retrieveUserFavorites(int userID) throws SQLException
+    {
+        ResultSet resultSet = null;
+        resultSet = retrieveWishlistDB(this.connection, userID);
 
+        ArrayList<String> ids = new ArrayList<>();
+        while (resultSet.next()) 
+        {
+            ids.add(resultSet.getString("game_id"));
+        }
+        return ids;
+    }
+
+    private static ResultSet retrieveFavoritesDB(Connection connection, int userID) 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT game_id FROM FavGames WHERE account_id = " + userID);
+            return resultSet;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static ResultSet retrieveReviews(Connection connection, int userID) 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Reviews WHERE account_id = " + userID);
+            return resultSet;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
