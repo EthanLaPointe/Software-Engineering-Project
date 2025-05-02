@@ -8,7 +8,7 @@ public class DBConnectionManager {
     private static String url = "jdbc:mysql://localhost:3306/Gamed_db";
     private static String driver_name = "com.mysql.cj.jdbc.Driver";
     private static String username = "root";
-    private static String password = "Chaser580558";
+    private static String password = "68RKb5_p1";
     private static Connection connection;
 
     public static Connection getConnection(){
@@ -19,6 +19,7 @@ public class DBConnectionManager {
                 System.out.println("Success");
             } catch (SQLException e) {
                 System.out.println("Failed to create connection.");
+                e.printStackTrace();
             }
 
         } catch (ClassNotFoundException e) {

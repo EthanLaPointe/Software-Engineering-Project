@@ -127,7 +127,7 @@ public class PrimaryController {
         }
 
 
-        // TODO: Add code to actually create the account in a database or file
+    
         //connection = DBConnectionManager.getConnection();
         try (Connection connection = DBConnectionManager.getConnection();
             PreparedStatement checkStmt  = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?"))
@@ -158,8 +158,10 @@ public class PrimaryController {
         cancelCreateAccount();
     } catch(SQLException e){
         e.printStackTrace();
-        errorMessageLabel.setText("database error occurred!");
+        errorMessageLabel.setText("could not connect to the database!");
     }
+
+
 }
 
     public boolean containsSpecialCharacter(String str){
