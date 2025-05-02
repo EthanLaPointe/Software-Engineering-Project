@@ -125,7 +125,7 @@ public class PrimaryController {
                     "be at least 8 characters in length, and contain an uppercase letter");
             return;
         }
-
+ 
     
         //connection = DBConnectionManager.getConnection();
         try (Connection connection = DBConnectionManager.getConnection();
@@ -144,7 +144,7 @@ public class PrimaryController {
 
             try(PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO Accounts (username, password, date_created) VALUES (?, ?, ?)")){
                 insertStmt.setString(1,username);
-                insertStmt.setString(2,password);
+                insertStmt.setString(2,hashedPassword);
                 //need to add date of creation
                 insertStmt.setTimestamp(3,Timestamp.valueOf(LocalDateTime.now()));
                 insertStmt.executeUpdate();

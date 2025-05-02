@@ -14,17 +14,28 @@ public class DBConnectionManager {
     public static Connection getConnection(){
         try{
             Class.forName(driver_name);
-            try{
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Database connection successful.");
+            }
+
+
+            /* try{
                 connection = DriverManager.getConnection(url, username, password);
                 System.out.println("Success");
             } catch (SQLException e) {
                 System.out.println("Failed to create connection.");
                 e.printStackTrace();
-            }
+            } */
 
         } catch (ClassNotFoundException e) {
             System.out.println("Driver not found.");
         }
+        catch (SQLException e) {
+            System.out.println("Failed to connect to database.");
+            e.printStackTrace();
+        }
+
         return connection;
     }
 
