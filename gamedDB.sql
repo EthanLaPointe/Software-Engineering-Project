@@ -7,7 +7,7 @@ CREATE TABLE Accounts
 	account_id int auto_increment primary key,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
-    dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE WishLists
@@ -32,5 +32,6 @@ CREATE TABLE Reviews
     game_id INT,
 	account_id INT,
     rating INT NOT NULL,
+    rating_text VARCHAR(1000),
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );

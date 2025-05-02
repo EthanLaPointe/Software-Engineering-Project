@@ -4,17 +4,24 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="22.0" prefWidth="73.0" text="← Back" />
-            <Label prefHeight="72.0" prefWidth="466.0" text="My Profile" textAlignment="CENTER">
+            <ImageView fitHeight="76.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="/logo.png" />
+               </image>
+            </ImageView>
+            <Label prefHeight="72.0" prefWidth="466.0" style="-fx-background-color: #222222;" text="My Profile" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="41.0" />
                </font>
@@ -33,7 +40,7 @@
          <children>
             <VBox maxHeight="1532.0" prefHeight="1480.0" prefWidth="468.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="272.0" text="My Wishlist" textAlignment="CENTER" />
+                  <Label prefHeight="17.0" prefWidth="272.0" style="-fx-background-color: #222222;" text="My Wishlist" textAlignment="CENTER" textFill="WHITE" />
                   <ScrollPane prefHeight="1178.0" prefWidth="496.0">
                      <content>
                         <VBox fx:id="wishlistContainer" />
@@ -42,7 +49,7 @@
             </VBox>
             <VBox maxHeight="1516.0" prefHeight="1480.0" prefWidth="532.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="287.0" text="My Favorites" />
+                  <Label prefHeight="17.0" prefWidth="287.0" style="-fx-background-color: #222222;" text="My Favorites" textFill="WHITE" />
                   <ScrollPane prefHeight="1180.0" prefWidth="490.0">
                      <content>
                         <VBox fx:id="favoritesContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="428.0" />
@@ -51,18 +58,22 @@
             </VBox>
             <VBox maxHeight="1538.0" prefHeight="1480.0" prefWidth="496.0">
                <children>
-                  <Label prefHeight="20.0" prefWidth="397.0" text="My Reviews" textAlignment="CENTER" />
+                  <Label prefHeight="20.0" prefWidth="397.0" style="-fx-background-color: #222222;" text="My Reviews" textAlignment="CENTER" textFill="WHITE" />
                   <ScrollPane prefHeight="1184.0" prefWidth="623.0">
                      <content>
                         <VBox fx:id="reviewsContainer" maxHeight="1626.0" prefHeight="1469.0" prefWidth="526.0" />
                      </content></ScrollPane>
                </children>
             </VBox>
-            <HBox prefHeight="1480.0" prefWidth="472.0">
+            <VBox prefHeight="1480.0" prefWidth="472.0">
                <children>
-                  <Label text="My Profile" />
+                  <Label style="-fx-background-color: #222222;" text="My Profile" textFill="WHITE" />
+                  <ScrollPane prefHeight="1180.0" prefWidth="490.0">
+                     <content>
+                        <VBox fx:id="profileContainer" maxHeight="1179.0" prefHeight="1179.0" prefWidth="428.0" />
+                     </content></ScrollPane>
                </children>
-            </HBox>
+            </VBox>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

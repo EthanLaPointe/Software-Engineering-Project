@@ -1,4 +1,4 @@
-package DataClasses;
+package model;
 
 public class Game {
     private int id;

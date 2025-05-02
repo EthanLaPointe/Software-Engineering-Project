@@ -3,7 +3,15 @@ package gamed.gamedtestproject;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Label; // Ensure Label is imported
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -14,22 +22,116 @@ public class ProfileController {
     @FXML private VBox wishlistContainer;
     @FXML private VBox favoritesContainer;
     @FXML private VBox reviewsContainer;
+    @FXML private VBox profileContainer;
+    @FXML private ImageView logoImage;
+    @FXML private ImageView profileImage;
+    @FXML private Label usernameLabel;
+    @FXML private Label dateCreatedLabel;
 
-    @FXML
+    Statement statement;
+    ResultSet resultSet;
+    
+
+
     public void initialize() {
+        logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
-        //loadWishlist();
-        //loadFavorites();
-        //loadReviews();
+        try {
+            profileImage.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+        } catch (Exception e) {
+            System.err.println("Error loading default profile image: " + e.getMessage());
+        }
+        loadWishlist();
+        loadFavorites();
+        loadReviews();
+        loadProfileData();
     }
 
-    private void loadWishlist() {
+    @FXML
+    private void logout() throws IOException {
+        //TODO add logic for actually logging out user
+        App.setRoot("primary");
+    }
+
+    @FXML
+    private void changeProfilePicture() throws IOException{
+        //TODO add logic for uploading images to database
+    }
+
+    private void loadWishlist() { 
+        try {
+            // Fetch wishlist data from the database
+            DBConnectionManager.getConnection();
+            statement = DBConnectionManager.getConnection().createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM WishLists");
+            while (resultSet.next()) {
+                String gameTitle = resultSet.getString("game_title");
+                String imagePath = resultSet.getString("image_path");
+                wishlistContainer.getChildren().add(createGameCard(gameTitle, imagePath));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error executing query: " + e.getMessage());
+        }
+       
+        for (int i = 0; i < wishlistContainer.getChildren().size(); i++) {
+            wishlistContainer.getChildren().add(createGameCard("Game Title", "/path/to/image.jpg"));
+        }
     }
 
     private void loadFavorites() {
+        try {
+            // Fetch favorite games from the database
+            DBConnectionManager.getConnection();
+            statement = DBConnectionManager.getConnection().createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM FavGames");
+            while (resultSet.next()) {
+                String gameTitle = resultSet.getString("game_title");
+                String imagePath = resultSet.getString("image_path");
+                favoritesContainer.getChildren().add(createGameCard(gameTitle, imagePath));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error executing query: " + e.getMessage());
+        }
+        
     }
 
     private void loadReviews() {
+        try {
+            // Fetch reviews from the database
+            DBConnectionManager.getConnection();
+            statement = DBConnectionManager.getConnection().createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM Reviews");
+            while (resultSet.next()) {
+                String gameTitle = resultSet.getString("game_title");
+                int rating = resultSet.getInt("rating");
+                String comment = resultSet.getString("comment");
+                addReview(gameTitle, rating, comment);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error executing query: " + e.getMessage());
+        }
+        
+    }
+    private void loadProfileData() {
+        try {
+            // Fetch profile data from the database
+            DBConnectionManager.getConnection();
+            statement = DBConnectionManager.getConnection().createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM Accounts");
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                usernameLabel.setText(username);
+                String dateCreated = resultSet.getString("dateCreated");
+                dateCreatedLabel.setText(dateCreated);
+                String profileImagePath = resultSet.getString("profile_image_path");
+                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
+                profileContainer.getChildren().add(createProfileData(username, dateCreated, profileImagePath));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error executing query: " + e.getMessage());
+        }
+        
+        
     }
 
     private VBox createGameCard(String title, String imagePath) {
@@ -88,6 +190,19 @@ public class ProfileController {
         reviewsContainer.getChildren().add(reviewBox);
     }
 
+    private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
+
+        VBox profileBox = new VBox(10);
+        profileBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;"); 
+
+        Label usernameLabel = new Label("Username: " + username);
+        Label dateCreatedLabel = new Label("Date Created: " + dateCreated);
+        ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath))); 
+
+        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
+        return profileBox;
+    }
+
     private void openGameDetails(String gameTitle) {
         try {
             App.setRoot("game");
@@ -100,4 +215,13 @@ public class ProfileController {
     private void goBackToHomepage() throws IOException {
         App.setRoot("secondary");
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
 }
