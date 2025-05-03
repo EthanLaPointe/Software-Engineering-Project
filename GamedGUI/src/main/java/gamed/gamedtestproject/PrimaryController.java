@@ -142,11 +142,10 @@ public class PrimaryController {
             //hashing the password
             String hashedPassword = jbcrypt.hashPassword(confirmPassword);
 
-            try(PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO Accounts (username, password, date_created) VALUES (?, ?, ?)")){
+            try(PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO Accounts (username, password) VALUES (?, ?)")){
                 insertStmt.setString(1,username);
                 insertStmt.setString(2,hashedPassword);
                 //need to add date of creation
-                insertStmt.setTimestamp(3,Timestamp.valueOf(LocalDateTime.now()));
                 insertStmt.executeUpdate();
             }
 
