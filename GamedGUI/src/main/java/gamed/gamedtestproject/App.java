@@ -18,6 +18,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Account;
 
 /**
  * JavaFX App
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
-
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -36,6 +36,7 @@ public class App extends Application {
         double screenHeight = screen.getBounds().getHeight();
         double width = screenWidth*0.8;
         double height = screenHeight*0.8;
+
 
         Parent root = loadFXML("primary");
 

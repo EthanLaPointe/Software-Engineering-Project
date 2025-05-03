@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import model.Account;
 
 
 
@@ -34,6 +35,8 @@ public class PrimaryController {
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorMessageLabel;
+
+    public static Account account = null;
 
     @FXML
     public void initialize() {
@@ -204,6 +207,8 @@ public class PrimaryController {
                     System.out.println("Login successful for user: " + username);
                     //Go to secondary???
                     App.setRoot("secondary");
+
+                    account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
                     
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
@@ -216,6 +221,10 @@ public class PrimaryController {
             e.printStackTrace();
             errorMessageLabel.setText("Database error during login.");
         }
+    }
+
+    public static Account getAccount(){
+        return account;
     }
 
 }
