@@ -65,9 +65,9 @@ public class ProfileController {
             statement = DBConnectionManager.getConnection().createStatement();
             resultSet = statement.executeQuery("SELECT * FROM WishLists");
             while (resultSet.next()) {
-                String gameTitle = resultSet.getString("game_title");
-                String imagePath = resultSet.getString("image_path");
-                wishlistContainer.getChildren().add(createGameCard(gameTitle, imagePath));
+                String gameTitle = resultSet.getString("account_id");
+                String imagePath = resultSet.getString("game_id");
+                
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
@@ -85,9 +85,9 @@ public class ProfileController {
             statement = DBConnectionManager.getConnection().createStatement();
             resultSet = statement.executeQuery("SELECT * FROM FavGames");
             while (resultSet.next()) {
-                String gameTitle = resultSet.getString("game_title");
-                String imagePath = resultSet.getString("image_path");
-                favoritesContainer.getChildren().add(createGameCard(gameTitle, imagePath));
+                String accountID = resultSet.getString("account_id");
+                String gameID = resultSet.getString("game_id");
+                
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
