@@ -24,7 +24,13 @@
             <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <ComboBox fx:id="searchCriteria" prefHeight="25.0" prefWidth="100.0" promptText="Search by" />
-                  <TextField fx:id="searchField" prefHeight="25.0" prefWidth="284.0" promptText="Search" />
+                  <HBox fx:id="searchInputContainer" alignment="CENTER" prefHeight="25.0" prefWidth="284.0">
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="25.0" prefWidth="284.0" promptText="Search" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="genreDropdown" prefHeight="25.0" prefWidth="284.0" promptText="Select Genre" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="platformDropdown" prefHeight="25.0" prefWidth="284.0" promptText="Select Platform" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
                   <Button mnemonicParsing="false" onAction="#searchGames" prefHeight="25.0" prefWidth="150.0" text="Search" />
                </children>
             </HBox>

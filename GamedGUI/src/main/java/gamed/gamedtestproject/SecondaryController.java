@@ -19,6 +19,9 @@ public class SecondaryController {
     @FXML private HBox featuredGamesContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
+    @FXML private ComboBox<String> genreDropdown;
+    @FXML private ComboBox<String> platformDropdown;
+    @FXML private HBox searchInputContainer;
     
     @FXML
     public void initialize() {
@@ -29,6 +32,31 @@ public class SecondaryController {
 
         searchCriteria.getItems().addAll("Name","Genre","ID","Platform");
         searchCriteria.setValue("Name");
+
+        //Setup genre dropdown
+        genreDropdown.getItems().addAll(
+                "Adventure", "Indie", "Arcade", "Visual Novel", "Pinball",
+                "Card & Board Game", "MOBA", "Point-and-Click", "Fighting",
+                "Shooter", "Music", "Platform", "Puzzle", "Racing", "RTS",
+                "RPG", "Simulator", "Sport", "Strategy", "Turn-Based Strategy",
+                "Tactical", "Hack and Slash/Beat 'em up", "Quiz/Trivia"
+        );
+
+        //Setup platform dropdown
+        platformDropdown.getItems().addAll(
+                "PC", "PlayStation 5", "Xbox Series X|S", "Xbox One",
+                "PlayStation 4", "Nintendo Switch", "PlayStation 3", "Xbox 360"
+        );
+
+        genreDropdown.setVisible(false);
+        platformDropdown.setVisible(false);
+        genreDropdown.setManaged(false);
+        platformDropdown.setManaged(false);
+
+        //Add listener for search criteria changes
+        searchCriteria.valueProperty().addListener((obs, oldValue, newValue) -> {
+            updateSearchInputs(newValue);
+        });
 
         featuredGamesContainer.setStyle("-fx-background-color: #222222;");
         // Create game cards for each carousel
@@ -84,6 +112,33 @@ public class SecondaryController {
         
         return card;
     }
+
+    private void updateSearchInputs(String criteria) {
+        //Hide all search inputs
+        searchField.setVisible(false);
+        searchField.setManaged(false);
+        genreDropdown.setVisible(false);
+        genreDropdown.setManaged(false);
+        platformDropdown.setVisible(false);
+        platformDropdown.setManaged(false);
+
+        //Show appropriate input based on criteria
+        switch (criteria) {
+            case "Name":
+            case "ID":
+                searchField.setVisible(true);
+                searchField.setManaged(true);
+                break;
+            case "Genre":
+                genreDropdown.setVisible(true);
+                genreDropdown.setManaged(true);
+                break;
+            case "Platform":
+                platformDropdown.setVisible(true);
+                platformDropdown.setManaged(true);
+                break;
+        }
+    }
     
     @FXML
     private void openProfilePage() throws IOException {
@@ -94,32 +149,25 @@ public class SecondaryController {
 
     @FXML
     private void searchGames() {
-        String query = searchField.getText();
         String criteria = searchCriteria.getValue();
+        String query = "";
 
-        // Logic for searching by different criteria
+        //Get the appropriate query value based on criteria
         switch (criteria) {
             case "Name":
-                // Search by name
-                System.out.println("Searching by name: " + query);
+            case "ID":
+                query = searchField.getText();
                 break;
             case "Genre":
-                // Search by genre
-                System.out.println("Searching by genre: " + query);
-                break;
-            case "ID":
-                // Search by ID
-                System.out.println("Searching by ID: " + query);
+                query = genreDropdown.getValue();
                 break;
             case "Platform":
-                // Search by platform
-                System.out.println("Searching by platform: " + query);
-                break;
-            default:
-                // Default search
-                System.out.println("Default search: " + query);
+                query = platformDropdown.getValue();
                 break;
         }
+
+        // Logic for searching by different criteria
+        System.out.println("Searching by " + criteria + ": " + query);
     }
     
     private void openGameDetails(String gameTitle) {
