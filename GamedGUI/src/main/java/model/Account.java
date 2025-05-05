@@ -6,6 +6,10 @@ public class Account {
     private String password;
     private String dateCreated;
 
+    public Account(int accountID){
+        this.accountID = accountID;
+    }
+
     public Account(int accountID, String username, String password, String dateCreated) {
         this.accountID=accountID;
         this.username = username;
