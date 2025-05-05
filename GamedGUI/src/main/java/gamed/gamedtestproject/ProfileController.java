@@ -1,21 +1,20 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
-
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Label; // Ensure Label is imported
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert; // Ensure Label is imported
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Account;
+import model.SessionManager;
 
 public class ProfileController {
 
@@ -44,7 +43,7 @@ public class ProfileController {
         loadWishlist();
         loadFavorites();
         loadReviews();
-        loadProfileData();
+        createProfileData();
     }
 
     @FXML
@@ -112,7 +111,7 @@ public class ProfileController {
         }
         
     }
-    private void loadProfileData() {
+     private void loadProfileData() {
         try {
             // Fetch profile data from the database
             DBConnectionManager.getConnection();
@@ -132,7 +131,7 @@ public class ProfileController {
         }
         
         
-    }
+    } 
 
     private VBox createGameCard(String title, String imagePath) {
         VBox card = new VBox(10);
@@ -190,16 +189,26 @@ public class ProfileController {
         reviewsContainer.getChildren().add(reviewBox);
     }
 
-    private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
+    private VBox createProfileData() {
+
+        Account currentUser  = SessionManager.getCurrentUser();
+
+        //just in case user logins in without username and password
+        if (currentUser == null) {
+            System.err.println("No user is currently logged in.");
+            return new VBox(new Label("No user data available"));
+        }
+        String username = currentUser.getUsername();
+        String dateCreated = currentUser.getDateCreated();
+        //user needs to be able to change this
 
         VBox profileBox = new VBox(10);
         profileBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;"); 
 
         Label usernameLabel = new Label("Username: " + username);
         Label dateCreatedLabel = new Label("Date Created: " + dateCreated);
-        ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath))); 
 
-        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
+        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel);
         return profileBox;
     }
 

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import dao.AccountDAO;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.Account;
+import model.SessionManager;
 
 
 
@@ -191,6 +193,7 @@ public class PrimaryController {
     
         if (username.isEmpty() || password.isEmpty()) {
             errorMessageLabel.setText("Username and password are required.");
+            System.out.println("username and password required");
             return;
         }
     
@@ -206,17 +209,28 @@ public class PrimaryController {
     
                 if (jbcrypt.checkPassword(password, storedHashedPassword)) {
                     System.out.println("Login successful for user: " + username);
-                    //Go to secondary???
+                    Account loggedInAccount = AccountDAO.getAccountByUsername(username);
+                    SessionManager.setCurrentUser(loggedInAccount);
                     App.setRoot("secondary");
 
+<<<<<<< Updated upstream
                     account = new Account(rs.getInt(1));
+=======
+                    account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
                     rs.close();
                     stmt.close();
+=======
+                    System.out.println(account);
+>>>>>>> Stashed changes
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
+                    System.out.println("invalid username or password");
                 }
             } else {
                 errorMessageLabel.setText("Invalid username or password.");
+                System.out.println("invalid username or password");
             }
     
         } catch (SQLException | IOException e) {

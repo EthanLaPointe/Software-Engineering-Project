@@ -47,7 +47,7 @@
                             </font>
                         </Label>
                         <PasswordField fx:id="passwordField" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" onAction="#switchToSecondary" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#showCreateAccountDialog" prefHeight="30.0" prefWidth="150.0" text="Create Account" />
