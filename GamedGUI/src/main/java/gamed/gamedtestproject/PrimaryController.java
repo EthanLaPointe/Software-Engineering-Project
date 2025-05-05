@@ -36,7 +36,7 @@ public class PrimaryController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorMessageLabel;
 
-    private static Account account = null;
+    private static Account account;
 
     @FXML
     public void initialize() {
@@ -209,7 +209,7 @@ public class PrimaryController {
                     //Go to secondary???
                     App.setRoot("secondary");
 
-                    account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                    account = new Account(rs.getInt(1));
                     rs.close();
                     stmt.close();
                 } else {
