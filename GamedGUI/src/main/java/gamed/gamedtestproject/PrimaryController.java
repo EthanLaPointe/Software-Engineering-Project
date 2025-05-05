@@ -36,7 +36,7 @@ public class PrimaryController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorMessageLabel;
 
-    public static Account account = null;
+    private static Account account = null;
 
     @FXML
     public void initialize() {
@@ -152,16 +152,17 @@ public class PrimaryController {
 
  
         System.out.println("Account created for user: " + username);
-
+        rs.close();
+        checkStmt.close();
         // Close the dialog
         cancelCreateAccount();
-    } catch(SQLException e){
-        e.printStackTrace();
-        errorMessageLabel.setText("could not connect to the database!");
+        } catch(SQLException e){
+            e.printStackTrace();
+            errorMessageLabel.setText("could not connect to the database!");
+        }
+
+
     }
-
-
-}
 
     public boolean containsSpecialCharacter(String str){
         return str.contains("*") || str.contains("!")
@@ -209,7 +210,8 @@ public class PrimaryController {
                     App.setRoot("secondary");
 
                     account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
-                    
+                    rs.close();
+                    stmt.close();
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
                 }
