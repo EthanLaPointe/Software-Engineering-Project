@@ -29,11 +29,26 @@ public class PrimaryController {
     @FXML private StackPane rootPane;
 
     // Create Account Dialog Components
+<<<<<<< Updated upstream
     @FXML private VBox createAccountDialog;
     @FXML private TextField newUsernameField;
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorMessageLabel;
+=======
+    @FXML
+    private VBox createAccountDialog;
+    @FXML
+    private TextField newUsernameField;
+    @FXML
+    private PasswordField newPasswordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private Label errorMessageLabel;
+
+    Account account = null;
+>>>>>>> Stashed changes
 
     @FXML
     public void initialize() {
@@ -204,7 +219,17 @@ public class PrimaryController {
                     System.out.println("Login successful for user: " + username);
                     //Go to secondary???
                     App.setRoot("secondary");
+<<<<<<< Updated upstream
                     
+=======
+
+                    account = new Account(rs.getInt(1));
+                    rs.close();
+                    stmt.close();
+
+                    System.out.println(account);
+
+>>>>>>> Stashed changes
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
                 }

@@ -1,7 +1,16 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+<<<<<<< Updated upstream
+=======
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+>>>>>>> Stashed changes
 
+import dao.AccountDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -112,8 +121,35 @@ public class ProfileController {
         }
         
     }
+<<<<<<< Updated upstream
     private void loadProfileData() {
         try {
+=======
+      private void loadProfileData() {
+        Account currentUser = SessionManager.getCurrentUser();
+    if (currentUser == null) {
+        System.err.println("No user is currently logged in.");
+        return;
+    }
+
+    // Optionally update the user with full DB data, like profile image
+    Account fullAccount = AccountDAO.getAccountByUsername(currentUser.getUsername());
+    if (fullAccount == null) {
+        System.err.println("User data could not be found in database.");
+        return;
+    }
+
+    VBox profileData = createProfileData(
+        fullAccount.getUsername(),
+        fullAccount.getDateCreated()
+        //fullAccount.getProfileImagePath()
+    );
+
+    profileContainer.getChildren().clear();
+    profileContainer.getChildren().add(profileData);
+        
+        /*try {
+>>>>>>> Stashed changes
             // Fetch profile data from the database
             DBConnectionManager.getConnection();
             statement = DBConnectionManager.getConnection().createStatement();
@@ -130,9 +166,14 @@ public class ProfileController {
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
+        */
         
+<<<<<<< Updated upstream
         
     }
+=======
+    }  
+>>>>>>> Stashed changes
 
     private VBox createGameCard(String title, String imagePath) {
         VBox card = new VBox(10);
@@ -190,7 +231,24 @@ public class ProfileController {
         reviewsContainer.getChildren().add(reviewBox);
     }
 
+<<<<<<< Updated upstream
     private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
+=======
+    private VBox createProfileDataString username, String dateCreated, String profileImagePath) {
+
+        
+
+        /* Account currentUser  = SessionManager.getCurrentUser();
+
+        //just in case user logins in without username and password
+        if (currentUser == null) {
+            System.err.println("No user is currently logged in.");
+            return new VBox(new Label("No user data available"));
+        }
+        String username = currentUser.getUsername();
+        LocalDate dateCreated = currentUser.getDateCreated();
+        //user needs to be able to change this
+>>>>>>> Stashed changes
 
         VBox profileBox = new VBox(10);
         profileBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;"); 
@@ -199,8 +257,13 @@ public class ProfileController {
         Label dateCreatedLabel = new Label("Date Created: " + dateCreated);
         ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath))); 
 
+<<<<<<< Updated upstream
         profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
         return profileBox;
+=======
+        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel);
+        return profileBox; */
+>>>>>>> Stashed changes
     }
 
     private void openGameDetails(String gameTitle) {
