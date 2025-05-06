@@ -2,12 +2,18 @@ package gamed.gamedtestproject;
 
 import java.io.IOException;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 import dao.AccountDAO;
@@ -122,9 +128,12 @@ public class ProfileController {
         
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private void loadProfileData() {
         try {
 =======
+=======
+>>>>>>> Stashed changes
       private void loadProfileData() {
         Account currentUser = SessionManager.getCurrentUser();
     if (currentUser == null) {
@@ -149,6 +158,9 @@ public class ProfileController {
     profileContainer.getChildren().add(profileData);
         
         /*try {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             // Fetch profile data from the database
             DBConnectionManager.getConnection();
@@ -169,8 +181,12 @@ public class ProfileController {
         */
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         
     }
+=======
+    }  
+>>>>>>> Stashed changes
 =======
     }  
 >>>>>>> Stashed changes
@@ -232,8 +248,11 @@ public class ProfileController {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
 =======
+=======
+>>>>>>> Stashed changes
     private VBox createProfileDataString username, String dateCreated, String profileImagePath) {
 
         
@@ -258,8 +277,13 @@ public class ProfileController {
         ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath))); 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
         return profileBox;
+=======
+        profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel);
+        return profileBox; */
+>>>>>>> Stashed changes
 =======
         profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel);
         return profileBox; */

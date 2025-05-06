@@ -48,6 +48,9 @@ public class PrimaryController {
     private Label errorMessageLabel;
 
     Account account = null;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     @FXML
@@ -229,6 +232,9 @@ public class PrimaryController {
 
                     System.out.println(account);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");

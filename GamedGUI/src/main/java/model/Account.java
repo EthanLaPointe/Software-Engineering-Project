@@ -16,6 +16,9 @@ public class Account {
     }
 
     public Account(int accountID, String username, String password, LocalDate dateCreated) {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         this.accountID=accountID;
         this.username = username;

@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+=======
+import java.time.LocalDate;
+>>>>>>> Stashed changes
 =======
 import java.time.LocalDate;
 >>>>>>> Stashed changes
@@ -22,6 +26,7 @@ public class AccountDAO {
         List<Account> accounts = new ArrayList<>();
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         try(Connection conn =DBConnectionManager.getConnection();
             Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM ACCOUNTS")){
@@ -33,6 +38,8 @@ public class AccountDAO {
                             rs.getString("dateCreated")
                     ));
 =======
+=======
+>>>>>>> Stashed changes
         /* try(Connection conn = DBConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)){
                 stmt.setString(1,username);
