@@ -17,6 +17,8 @@ public class SecondaryController {
     @FXML private ImageView profileButton;
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
+
+    @FXML private HBox searchResultsContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
     @FXML private ComboBox<String> genreDropdown;
@@ -44,9 +46,28 @@ public class SecondaryController {
 
         //Setup platform dropdown
         platformDropdown.getItems().addAll(
-                "PC", "PlayStation 5", "Xbox Series X|S", "Xbox One",
-                "PlayStation 4", "Nintendo Switch", "PlayStation 3", "Xbox 360"
+                "PC",
+                // Sony PlayStation
+                "PlayStation", "PlayStation 2", "PlayStation 3", "PlayStation 4", "PlayStation 5",
+                "PlayStation Portable", "PlayStation Vita",
+                // Microsoft Xbox
+                "Xbox", "Xbox 360", "Xbox One", "Xbox Series X|S",
+                // Nintendo
+                "Family Computer Disk System", "NES", "Super Nintendo", "Super Famicom",
+                "Nintendo 64",
+                "Game Boy", "Game Boy Color", "Game Boy Advance",
+                "Nintendo DS", "Nintendo 3DS",
+                "Nintendo GameCube", "Wii", "WiiU", "Nintendo Switch",
+                // Sega
+                "Sega Genesis", "Sega 32X", "Sega Saturn", "Sega Dreamcast", "Sega Game Gear",
+                // Atari
+                "Atari 2600",
+                // Commodore / Amiga
+                "Commodore C64/128/MAX", "Amiga",
+                // Other
+                "iOS", "Android","Arcade"
         );
+
 
         genreDropdown.setVisible(false);
         platformDropdown.setVisible(false);
@@ -58,9 +79,11 @@ public class SecondaryController {
             updateSearchInputs(newValue);
         });
 
-        featuredGamesContainer.setStyle("-fx-background-color: #222222;");
+        featuredGamesContainer.setStyle("-fx-background-color: #1A1A1A;");
+        searchResultsContainer.setStyle("-fx-background-color: #1A1A1A;");
         // Create game cards for each carousel
         populateFeaturedGames();
+        populateSearchResults(new String[0]);
     }
     
     private void populateFeaturedGames() {
@@ -72,8 +95,27 @@ public class SecondaryController {
             featuredGamesContainer.getChildren().add(createGameCard(games[i], images[i]));
         }
     }
-    
-    
+
+    private void populateSearchResults(String[] gameResults) {
+        searchResultsContainer.getChildren().clear();
+
+        if (gameResults.length == 0) {
+            javafx.scene.control.Label noResults = new javafx.scene.control.Label("No search results yet. Try searching for a game!");
+            noResults.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+            searchResultsContainer.getChildren().add(noResults);
+            return;
+        }
+
+        String[] placeholderImages = {"/placeholder.png", "/placeholder.png", "/placeholder.png",
+                "/placeholder.png", "/placeholder.png"};
+
+        for (int i = 0; i < gameResults.length; i++) {
+            String imagePath = i < placeholderImages.length ? placeholderImages[i] : "/placeholder.png";
+            searchResultsContainer.getChildren().add(createGameCard(gameResults[i], imagePath));
+        }
+    }
+
+
     private VBox createGameCard(String title, String imagePath) {
         VBox card = new VBox(10);
         card.setPrefWidth(200);
@@ -166,8 +208,8 @@ public class SecondaryController {
                 break;
         }
 
-        // Logic for searching by different criteria
-        System.out.println("Searching by " + criteria + ": " + query);
+        String[] mockResults = {"Result 1: " + query, "Result 2: " + query, "Result 3: " + query, "Result 4: " + query};
+        populateSearchResults(mockResults);
     }
     
     private void openGameDetails(String gameTitle) {

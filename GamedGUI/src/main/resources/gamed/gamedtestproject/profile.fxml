@@ -7,8 +7,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
@@ -17,7 +17,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="22.0" prefWidth="73.0" text="← Back" />
             <ImageView fx:id="logoImage" fitHeight="76.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Label prefHeight="72.0" prefWidth="350.0" style="-fx-background-color: #222222;" text="My Profile" textAlignment="CENTER" textFill="WHITE">
+            <Label prefHeight="72.0" prefWidth="350.0" style="-fx-background-color: #222222; -fx-background-radius: 20;" text="My Profile" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="41.0" />
                </font>
