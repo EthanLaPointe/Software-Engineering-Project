@@ -13,6 +13,7 @@ import com.api.igdb.utils.TwitchToken;
 
 import proto.Game;
 import proto.Genre;
+import proto.Platform;
 
 public class APIHandler 
 {
@@ -37,6 +38,7 @@ public class APIHandler
         String authenticationToken = token.getAccess_token();
         wrapper.setCredentials(clientID, authenticationToken);
 
+        //Genre dictionary
         genreDictionary.put("Point-and-click", 2L);
         genreDictionary.put("Fighting", 4L);
         genreDictionary.put("Shooter", 5L);
@@ -108,12 +110,17 @@ public class APIHandler
         }
     }
 
+
+
     public List<Game> SearchGameByGenre(String genre) 
     {
-        APICalypse apicalypse = new APICalypse().search(genre).fields("*").limit(20);
+        Long genreID = genreDictionary.get(genre);
+
+        APICalypse apicalypse = new APICalypse().fields("*").where("genres = " + genreID).limit(20);
         try 
         {
             List<Game> games = ProtoRequestKt.games(wrapper, apicalypse);
+
             if (games.size() > 0) 
             {
                 return games;
@@ -188,7 +195,37 @@ public class APIHandler
     }
 
     //Used for finding all genres to place in the genre dictionary for searching
-    public HashMap<Long, String> getAllGenres()
+    public HashMap<Long, String> getAllPlatforms()
+    {
+        HashMap<Long, String> platforms = new HashMap<>();
+        Long platformID = 0l;
+
+        try
+        {
+            while(platformID < 60)
+            {
+                List<Platform> platformList = ProtoRequestKt.platforms(wrapper, new APICalypse().fields("*").where("id = " + platformID));
+
+                if(platformList.size() > 0)
+                {
+                    platforms.put(platformList.get(0).getId(), platformList.get(0).getName());
+                }
+                else
+                {
+                    System.out.println("Platform not found with ID: " + platformID);
+                }
+                platformID++;
+            }
+            return platforms;
+        }
+        catch (RequestException e) 
+        {
+            System.out.println("Error retrieving game platforms: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private HashMap<Long, String> getAllGenres()
     {
         HashMap<Long, String> genres = new HashMap<>();
         Long genreID = 2l;

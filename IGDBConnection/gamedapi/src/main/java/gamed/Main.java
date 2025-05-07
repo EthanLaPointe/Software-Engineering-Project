@@ -15,15 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import com.api.igdb.apicalypse.APICalypse;
-import com.api.igdb.request.ProtoRequestKt;
 import com.api.igdb.utils.ImageBuilderKt;
 import com.api.igdb.utils.ImageSize;
 import com.api.igdb.utils.ImageType;
 
 import proto.Game;
-import proto.Genre;
-import proto.Platform;
 
 public class Main 
 {
@@ -186,20 +182,24 @@ public class Main
                     }
                     break;
                 case 12:
-                    System.out.println("retrieving all genres...");
-                    HashMap<Long, String> allGenres = handler.getAllGenres();
-                    for (Long id : allGenres.keySet()) 
+                    System.out.println("Enter Genre to search: ");
+                    String genre = scan.next();
+                    List<Game> genreSearchResults = handler.SearchGameByGenre(genre);
+                    if (genreSearchResults != null) 
                     {
-                        System.out.println("ID: " + id + ", Name: " + allGenres.get(id));
+                        for(Game g : genreSearchResults) 
+                        {
+                            System.out.println("Name: " + g.getName());
+                        }
                     }
                     break;
                 case 13:
-                    System.out.println("Enter genre ID: ");
-                    Long genreID = scan.nextLong();
-                    String genreName = handler.getGenreByID(genreID);
-
-                    System.out.println("Genre name: " + genreName);
-                    break;
+                    System.out.println("Getting all platforms and IDs...");
+                    HashMap<Long, String> platforms = handler.getAllPlatforms();
+                    for (Long key : platforms.keySet()) 
+                    {
+                        System.out.println("Platform ID: " + key + ", Name: " + platforms.get(key));
+                    }
             }
         }
     }
