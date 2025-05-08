@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="743.0" prefWidth="1194.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.PrimaryController">
@@ -20,7 +20,7 @@
         <ImageView fx:id="background" fitHeight="743.0" fitWidth="1195.0" pickOnBounds="true" preserveRatio="true" />
         <BorderPane prefHeight="200.0" prefWidth="200.0">
             <center>
-                <GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: BLUE;" vgap="10.0" BorderPane.alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #222222;" vgap="10.0" BorderPane.alignment="CENTER">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="90.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="514.0" minWidth="10.0" prefWidth="460.0" />
@@ -35,19 +35,19 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
                     <children>
-                        <Label prefHeight="203.0" prefWidth="577.0" text="Username:">
+                        <Label prefHeight="203.0" prefWidth="577.0" text="Username:" textFill="WHITE">
                             <font>
                                 <Font name="Comic Sans MS Bold" size="15.0" />
                             </font>
                         </Label>
                         <TextField fx:id="usernameField" promptText="Enter Username" GridPane.columnIndex="1" />
-                        <Label prefHeight="185.0" prefWidth="275.0" text="Password:" GridPane.rowIndex="1">
+                        <Label prefHeight="185.0" prefWidth="275.0" text="Password:" textFill="WHITE" GridPane.rowIndex="1">
                             <font>
                                 <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
                         <PasswordField fx:id="passwordField" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" onAction="#switchToSecondary" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="43.0" prefWidth="547.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#showCreateAccountDialog" prefHeight="30.0" prefWidth="150.0" text="Create Account" />
@@ -106,7 +106,7 @@
                         <Insets left="20.0" right="20.0" />
                     </VBox.margin>
                 </GridPane>
-                <Label fx:id="errorMessageLabel" textFill="RED">
+                <Label fx:id="errorMessageLabel" textAlignment="CENTER" textFill="RED" wrapText="true">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
@@ -117,7 +117,7 @@
                 <HBox alignment="CENTER" spacing="20.0">
                     <children>
                         <Button mnemonicParsing="false" onAction="#cancelCreateAccount" prefHeight="35.0" prefWidth="120.0" text="Cancel" />
-                        <Button mnemonicParsing="false" onAction="#createAccount" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #4CAF50;" text="Create Account" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#createAccount" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #4CAF50;" text="Create" textFill="WHITE" />
                     </children>
                     <VBox.margin>
                         <Insets top="20.0" />

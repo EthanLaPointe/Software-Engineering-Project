@@ -1,6 +1,13 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import dao.AccountDAO;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -9,23 +16,38 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.animation.FadeTransition;
 import javafx.util.Duration;
+import model.Account;
+import model.SessionManager;
+
+
 
 public class PrimaryController {
 
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private ImageView logo;
-    @FXML private ImageView background;
-    @FXML private StackPane rootPane;
+
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private ImageView logo;
+    @FXML
+    private ImageView background;
+    @FXML
+    private StackPane rootPane;
 
     // Create Account Dialog Components
-    @FXML private VBox createAccountDialog;
-    @FXML private TextField newUsernameField;
-    @FXML private PasswordField newPasswordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private Label errorMessageLabel;
+    @FXML
+    private VBox createAccountDialog;
+    @FXML
+    private TextField newUsernameField;
+    @FXML
+    private PasswordField newPasswordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private Label errorMessageLabel;
+
 
     @FXML
     public void initialize() {
@@ -58,7 +80,7 @@ public class PrimaryController {
 
     @FXML
     private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+        handleLogin();
     }
 
     @FXML
@@ -94,27 +116,129 @@ public class PrimaryController {
         String username = newUsernameField.getText().trim();
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+        //Connection connection = null;
 
         // Validate the input
         if (username.isEmpty()) {
             errorMessageLabel.setText("Username cannot be empty");
             return;
         }
-
         if (password.isEmpty()) {
             errorMessageLabel.setText("Password cannot be empty");
             return;
         }
-
         if (!password.equals(confirmPassword)) {
             errorMessageLabel.setText("Passwords do not match");
             return;
         }
 
-        // TODO: Add code to actually create the account in a database or file
-        System.out.println("Account created for user: " + username);
+        if (password.length() <= 8 && !containsSpecialCharacter(password) && !containsUpperCase(password)) {
+            errorMessageLabel.setText("Passwords must contain a special character(!,@,#,$,%,&,*), " +
+                    "be at least 8 characters in length, and contain an uppercase letter");
+            return;
+        }
 
-        // Close the dialog
-        cancelCreateAccount();
+
+        //connection = DBConnectionManager.getConnection();
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement checkStmt = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?")) {
+            checkStmt.setString(1, username);
+            ResultSet rs = checkStmt.executeQuery();
+            //Statement statement = connection.createStatement();
+            //ResultSet rs = statement.executeQuery("Select * from Accounts where username = '"  + username + "'");
+            if (rs.next()) {
+                errorMessageLabel.setText("An account with that username already exists");
+                return;
+            }
+            //hashing the password
+            String hashedPassword = jbcrypt.hashPassword(confirmPassword);
+
+            try (PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO Accounts (username, password) VALUES (?, ?)")) {
+                insertStmt.setString(1, username);
+                insertStmt.setString(2, hashedPassword);
+                //need to add date of creation
+                insertStmt.executeUpdate();
+            }
+
+
+            System.out.println("Account created for user: " + username);
+            rs.close();
+            checkStmt.close();
+            // Close the dialog
+            cancelCreateAccount();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            errorMessageLabel.setText("could not connect to the database!");
+        }
+
+
+    }
+
+    public boolean containsSpecialCharacter(String str) {
+        return str.contains("*") || str.contains("!")
+                || str.contains("@") || str.contains("#")
+                || str.contains("$") || str.contains("%")
+                || str.contains("&");
+    }
+
+    public boolean containsUpperCase(String str) {
+        boolean contains = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                contains = true;
+                break;
+            }
+        }
+        return contains;
+    }
+
+    //login validation
+    @FXML
+    private void handleLogin() {
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            errorMessageLabel.setText("Username and password are required.");
+            System.out.println("username and password required");
+            return;
+        }
+
+        //get password from database
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement stmt = connection.prepareStatement("SELECT password FROM accounts WHERE username = ?")) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String storedHashedPassword = rs.getString("password");
+
+                if (jbcrypt.checkPassword(password, storedHashedPassword)) {
+                    System.out.println("Login successful for user: " + username);
+                    Account loggedInAccount = AccountDAO.getAccountByUsername(username);
+                    SessionManager.setCurrentUser(loggedInAccount);
+                    App.setRoot("secondary");
+
+                    account = new Account(rs.getInt(1));
+                    rs.close();
+                    stmt.close();
+=======
+                    System.out.println(account);
+>>>>>>> Stashed changes
+                } else {
+                    errorMessageLabel.setText("Invalid username or password.");
+                    System.out.println("invalid username or password");
+                }
+            } else {
+                errorMessageLabel.setText("Invalid username or password.");
+                System.out.println("invalid username or password");
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            errorMessageLabel.setText("Database error during login.");
+        }
     }
 }
