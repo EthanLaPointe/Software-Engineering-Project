@@ -3,15 +3,12 @@ package gamed.gamedtestproject;
 import java.io.IOException;
 import java.util.List;
 
-import com.api.igdb.utils.ImageBuilderKt;
-import com.api.igdb.utils.ImageSize;
-import com.api.igdb.utils.ImageType;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,7 +21,6 @@ public class SecondaryController {
     @FXML private ImageView profileButton;
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
-
     @FXML private HBox searchResultsContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
@@ -109,7 +105,7 @@ public class SecondaryController {
     {
         List<Game> games = handler.RetrieveFeaturedGames();
         
-        for (int i = 0; i < 6; i++) 
+        for (int i = 0; i < 20; i++)
         {
             Long gameID = games.get(i).getId();
             //String testURL = handler.GetGameImageURL(games.get(i));
@@ -175,6 +171,8 @@ public class SecondaryController {
         
         javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(title);
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+        titleLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
+        titleLabel.setMaxWidth(180);
         
         card.getChildren().addAll(imageView, titleLabel);
         
@@ -245,7 +243,7 @@ public class SecondaryController {
                 break;
         }
 
-        String[] mockResults = {"Result 1: " + query, "Result 2: " + query, "Result 3: " + query, "Result 4: " + query};
+        String[] mockResults = {"Result 1: " + query, "Result 2: " + query, "Result 3: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query};
         populateSearchResults(mockResults);
     }
     

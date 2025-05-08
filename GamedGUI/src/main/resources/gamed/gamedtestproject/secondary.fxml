@@ -68,7 +68,7 @@
                         <Insets bottom="5.0" left="10.0" />
                      </VBox.margin>
                   </Label>
-                  <ScrollPane fitToHeight="true" hbarPolicy="ALWAYS" pannable="true" prefHeight="280.0" prefWidth="760.0" style="-fx-background-color: #1A1A1A; -fx-background: #1A1A1A; -fx-border-color: #333333;" vbarPolicy="NEVER">
+                  <ScrollPane fitToHeight="true" hbarPolicy="ALWAYS" pannable="true" prefHeight="350.0" prefWidth="760.0" style="-fx-background-color: #1A1A1A; -fx-background: #1A1A1A; -fx-border-color: #333333;" vbarPolicy="NEVER">
                      <content>
                         <HBox fx:id="featuredGamesContainer" alignment="CENTER" prefHeight="260.0" spacing="15.0" style="-fx-background-color: #1A1A1A;" />
                      </content>
