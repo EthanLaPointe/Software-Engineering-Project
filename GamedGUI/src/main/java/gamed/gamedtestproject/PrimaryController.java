@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -15,7 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Account; // Adjusted to the correct package path for the Account class
 
 
 
@@ -29,29 +34,15 @@ public class PrimaryController {
     @FXML private StackPane rootPane;
 
     // Create Account Dialog Components
-<<<<<<< Updated upstream
+
     @FXML private VBox createAccountDialog;
     @FXML private TextField newUsernameField;
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorMessageLabel;
-=======
-    @FXML
-    private VBox createAccountDialog;
-    @FXML
-    private TextField newUsernameField;
-    @FXML
-    private PasswordField newPasswordField;
-    @FXML
-    private PasswordField confirmPasswordField;
-    @FXML
-    private Label errorMessageLabel;
 
     Account account = null;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 
     @FXML
     public void initialize() {
@@ -220,22 +211,27 @@ public class PrimaryController {
     
                 if (jbcrypt.checkPassword(password, storedHashedPassword)) {
                     System.out.println("Login successful for user: " + username);
-                    //Go to secondary???
-                    App.setRoot("secondary");
-<<<<<<< Updated upstream
                     
-=======
+                    //App.setRoot("secondary");
 
-                    account = new Account(rs.getInt(1));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/secondary.fxml"));
+                Parent root = loader.load();
+
+                ProfileController controller = loader.getController();
+                controller.setUsername(username); // Pass the logged-in username
+
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+
+
+                    /* account = new Account(rs.getInt(1));
                     rs.close();
                     stmt.close();
 
-                    System.out.println(account);
+                    System.out.println(account); */
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
                 }

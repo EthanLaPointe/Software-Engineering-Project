@@ -7,25 +7,35 @@ public class Account {
     private String username;
     private String password;
     private LocalDate dateCreated;
+    private String imagePath; // Assuming you have an image path field
 
-<<<<<<< Updated upstream
-    public Account(int accountID, String username, String password, String dateCreated) {
-=======
+
+    public Account(int accountID, String username, String password, String dateCreated, String imagePath) {
+        this.accountID = accountID;
+        this.username = username;
+        this.password = password;
+        this.dateCreated = LocalDate.parse(dateCreated);
+    }
     public Account(int accountID){
         this.accountID = accountID;
     }
 
-    public Account(int accountID, String username, String password, LocalDate dateCreated) {
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+    public Account(int accountID, String username, String password, LocalDate dateCreated, String imagePath) {
+
         this.accountID=accountID;
         this.username = username;
         this.password = password;
         this.dateCreated = dateCreated;
+        this.imagePath = imagePath;
     }
 
+
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public LocalDate getDateCreated(){
         return dateCreated;
