@@ -221,12 +221,11 @@ public class PrimaryController {
                     SessionManager.setCurrentUser(loggedInAccount);
                     App.setRoot("secondary");
 
-                    account = new Account(rs.getInt(1));
+                    //account = new Account(rs.getInt(1));
                     rs.close();
                     stmt.close();
-=======
-                    System.out.println(account);
->>>>>>> Stashed changes
+
+                    //System.out.println(account);
                 } else {
                     errorMessageLabel.setText("Invalid username or password.");
                     System.out.println("invalid username or password");

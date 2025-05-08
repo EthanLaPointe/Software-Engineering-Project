@@ -124,7 +124,7 @@ public class ProfileController {
                 dateCreatedLabel.setText(dateCreated);
                 String profileImagePath = resultSet.getString("profile_image_path");
                 profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
-                profileContainer.getChildren().add(createProfileData(username, dateCreated, profileImagePath));
+                profileContainer.getChildren().add(createProfileData());
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());

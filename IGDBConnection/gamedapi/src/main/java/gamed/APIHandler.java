@@ -9,6 +9,7 @@ import com.api.igdb.request.ProtoRequestKt;
 import com.api.igdb.request.TwitchAuthenticator;
 import com.api.igdb.utils.TwitchToken;
 
+import proto.Cover;
 import proto.Game;
 
 public class APIHandler 
@@ -32,6 +33,30 @@ public class APIHandler
 
         String authenticationToken = token.getAccess_token();
         wrapper.setCredentials(clientID, authenticationToken);
+    }
+
+    public String GetGameImageURL(Game game) 
+    {
+        APICalypse apicalypse = new APICalypse().fields("*").where("game = " + game.getId());
+
+        try 
+        {
+            List<Cover> covers = ProtoRequestKt.covers(wrapper, apicalypse);
+            if (covers.size() > 0) 
+            {
+                return covers.get(0).getImageId();
+            } 
+            else 
+            {
+                System.out.println("No cover found for game ID: " + game.getId());
+                return null;
+            }
+        } 
+        catch (RequestException e) 
+        {
+            System.out.println("Error retrieving game cover: " + e.getMessage());
+            return null;
+        }
     }
 
     public Game RetrieveGameByID(String gameID) 

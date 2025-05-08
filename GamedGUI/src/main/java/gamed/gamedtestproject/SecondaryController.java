@@ -31,7 +31,7 @@ public class SecondaryController {
     @FXML private ComboBox<String> genreDropdown;
     @FXML private ComboBox<String> platformDropdown;
     @FXML private HBox searchInputContainer;
-    private APIHandler handler = APIHandler.INSTANCE;
+    private APIHandler handler;
     
     @FXML
     public void initialize() {
@@ -44,10 +44,15 @@ public class SecondaryController {
         searchCriteria.setValue("Name");
 
         //Initialize api handler
-        handler.SetClientID("86hpmu9gws96n5ipkekcq715bq77tj");
-        handler.SetClientSecret("zhmdic84egb7xi2wfwttuwwvq8uiql");
-        handler.Initialize();
+        handler = APIHandler.INSTANCE;
 
+        if(handler != null)
+        {
+            handler.SetClientID("86hpmu9gws96n5ipkekcq715bq77tj");
+            handler.SetClientSecret("zhmdic84egb7xi2wfwttuwwvq8uiql");
+            handler.Initialize();
+        }
+        
         //Setup genre dropdown
         genreDropdown.getItems().addAll(
                 "Adventure", "Indie", "Arcade", "Visual Novel", "Pinball",

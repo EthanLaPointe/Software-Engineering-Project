@@ -14,6 +14,8 @@ import com.api.igdb.utils.ImageSize;
 import com.api.igdb.utils.ImageType;
 
 import proto.Game;
+import proto.Cover;
+import proto.CoverOrBuilder;
 
 public class Main 
 {
@@ -51,8 +53,9 @@ public class Main
                     if (game != null) 
                     {
                         printGameDetails(game);
-                        String imageURL = GetImageURL(game);
-                        System.out.println("Image URL: " + imageURL);
+                        String imageURL = handler.GetGameImageURL(game);
+                        String fullImageURL = ImageBuilderKt.imageBuilder(imageURL, ImageSize.COVER_SMALL, ImageType.PNG);
+                        System.out.println("Image URL: " + fullImageURL);
                     }
                     else
                     {
@@ -124,7 +127,9 @@ public class Main
 
     private static String GetImageURL(Game game) 
     {
-        String image_id = game.getCover().getImageId();
+        CoverOrBuilder cover = game.getCoverOrBuilder();
+        String image_id = game.getArtworks(1).getImageId();
+        System.out.println("Image id:" + cover.getUrl());
         String imageURL = ImageBuilderKt.imageBuilder(image_id, ImageSize.SCREENSHOT_HUGE, ImageType.PNG);
         return imageURL;
     }
