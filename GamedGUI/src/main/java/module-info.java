@@ -4,6 +4,7 @@ module gamed.gamedtestproject {
     requires java.sql; // for database stuff
     requires bcrypt;
     requires igdb.api.jvm;
+    requires java.net.http;
 
     opens gamed.gamedtestproject to javafx.fxml;
     exports gamed.gamedtestproject;

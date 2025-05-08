@@ -3,6 +3,17 @@ package gamed.gamedtestproject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpClient;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.api.igdb.apicalypse.APICalypse;
 import com.api.igdb.apicalypse.Sort;
@@ -25,8 +36,10 @@ public enum APIHandler
     INSTANCE;
     String clientID = "";
     String clientSecret = "";
+    String authToken = "";
     IGDBWrapper wrapper = IGDBWrapper.INSTANCE;
     HashMap<String, Long> genreDictionary = new HashMap<>();
+    URL coverURL;
 
     private APIHandler() 
     {
@@ -35,10 +48,20 @@ public enum APIHandler
 
     public void Initialize() 
     {
+        try
+        {
+            coverURL = new URI("https://api.igdb.com/v4/covers/").toURL();
+        }
+        catch (MalformedURLException | URISyntaxException e)
+        {
+            e.printStackTrace();
+        }
+        
         TwitchAuthenticator auth = TwitchAuthenticator.INSTANCE;
         TwitchToken token = auth.requestTwitchToken(clientID, clientSecret);
 
         String authenticationToken = token.getAccess_token();
+        authToken = authenticationToken;
         wrapper.setCredentials(clientID, authenticationToken);
 
         //Genre dictionary
@@ -76,30 +99,30 @@ public enum APIHandler
         this.clientSecret = clientSecret;
     }
 
-    public String GetGameImageURL(Game game) 
+    
+    public String GetGameImageURL(String gameID) 
     {
-        APICalypse apicalypse = new APICalypse().fields("*").where("game = " + game.getId());
-
-        try 
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.igdb.com/v4/covers"))
+            .header("Client-ID", clientID)
+            .header("Authorization", "Bearer " + authToken)
+            .method("POST", HttpRequest.BodyPublishers.ofString("fields image_id; where game = " + gameID + ";"))
+            .build();
+        HttpResponse<String> response = null;
+        try
         {
-            List<Cover> covers = ProtoRequestKt.covers(wrapper, apicalypse);
-            if (covers.size() > 0) 
-            {
-                String id = covers.get(0).getImageId();
-                return ImageBuilderKt.imageBuilder(id, ImageSize.COVER_BIG, ImageType.PNG);
-            } 
-            else 
-            {
-                System.out.println("No cover found for game ID: " + game.getId());
-                return null;
-            }
-        } 
-        catch (RequestException e) 
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            String image_id = response.body().substring(response.body().indexOf("image_id") + 12, response.body().indexOf("}") - 4);
+            return "https://images.igdb.com/igdb/image/upload/t_cover_big/" + image_id + ".jpg";
+        }
+        catch (InterruptedException | IOException e)
         {
-            System.out.println("Error retrieving game cover: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
+    
 
     public List<Game> RetrieveFeaturedGames() 
     {
@@ -396,5 +419,10 @@ public enum APIHandler
             System.out.println("Error retrieving wishlist: " + e.getMessage());
             return null;
         }
+    }
+
+    public String getAuthToken()
+    {
+        return authToken;
     }
 }

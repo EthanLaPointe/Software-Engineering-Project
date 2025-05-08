@@ -4,10 +4,24 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IO;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpClient;
 
 import com.api.igdb.utils.ImageBuilderKt;
 import com.api.igdb.utils.ImageSize;
@@ -106,6 +120,34 @@ public class Main
                     break;
                 case 6:
                     System.out.println("Exiting...");
+                    break;
+                case 7:
+                    //System.out.println("Enter the game ID to retrieve its cover image:");
+                    //String gameIDToRetrieve = scan.next();
+                    //Game gameToRetrieve = handler.RetrieveGameByID(gameIDToRetrieve);
+                    URL coverURL;
+
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create("https://api.igdb.com/v4/covers"))
+                            .header("Client-ID", clientID)
+                            .header("Authorization", "Bearer " + handler.getAuthToken())
+                            .method("POST", HttpRequest.BodyPublishers.ofString("fields image_id; where game = 8945;"))
+                            .build();
+                    HttpResponse<String> response = null;
+                    try
+                        {
+                            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                            System.out.println(response.body());
+                            String image_id = response.body().substring(response.body().indexOf("image_id") + 12, response.body().indexOf("}") - 4);
+                            System.out.println("Image ID: " + image_id);
+                        }
+                        catch (InterruptedException | IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    break;
+                case 8:
+                    System.out.println("Access token: " + handler.getAuthToken());
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");

@@ -111,12 +111,12 @@ public class SecondaryController {
         
         for (int i = 0; i < 6; i++) 
         {
-            //String image_id = games.get(i).getCover().getImageId();
-            String testURL = handler.GetGameImageURL(games.get(i));
-            //String imageURL = ImageBuilderKt.imageBuilder(image_id, ImageSize.COVER_SMALL, ImageType.PNG);
-            System.out.println(testURL);
+            Long gameID = games.get(i).getId();
+            //String testURL = handler.GetGameImageURL(games.get(i));
+            String imageURL = handler.GetGameImageURL(gameID.toString());
+            System.out.println(imageURL);
             
-            featuredGamesContainer.getChildren().add(createGameCard(games.get(i).getName(), testURL));
+            featuredGamesContainer.getChildren().add(createGameCard(games.get(i).getName(), imageURL));
         }
     }
 

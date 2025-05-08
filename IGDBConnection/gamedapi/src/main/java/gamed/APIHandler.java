@@ -16,6 +16,7 @@ public class APIHandler
 {
     String clientID = "";
     String clientSecret = "";
+    String authToken = "";
     IGDBWrapper wrapper = IGDBWrapper.INSTANCE;
 
     public APIHandler(String clientID, String clientSecret) 
@@ -32,6 +33,7 @@ public class APIHandler
         TwitchToken token = auth.requestTwitchToken(clientID, clientSecret);
 
         String authenticationToken = token.getAccess_token();
+        authToken = authenticationToken;
         wrapper.setCredentials(clientID, authenticationToken);
     }
 
@@ -94,5 +96,10 @@ public class APIHandler
             System.out.println("Error retrieving wishlist: " + e.getMessage());
             return null;
         }
+    }
+
+    public String getAuthToken()
+    {
+        return authToken;
     }
 }
