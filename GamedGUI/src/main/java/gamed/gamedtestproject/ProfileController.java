@@ -5,8 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert; // Ensure Label is imported
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -15,6 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Account;
+import model.Review;
+import proto.Game;
 import model.SessionManager;
 import java.sql.Connection;
 
@@ -60,56 +67,75 @@ public class ProfileController {
     }
 
     private void loadWishlist() { 
+        List<Game> wishlist = new ArrayList<>();
         try {
             // Fetch wishlist data from the database
             DBConnectionManager.getConnection();
-            statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM WishLists");
-            while (resultSet.next()) {
-                String gameTitle = resultSet.getString("account_id");
-                String imagePath = resultSet.getString("game_id");
-                
-            }
+            List<String> wishlistIDs = PrimaryController.dbConnector.retrieveUserWishlist(PrimaryController.accountID);
+            wishlist = PrimaryController.handler.RetrieveWishlist(wishlistIDs);
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
        
-        for (int i = 0; i < wishlistContainer.getChildren().size(); i++) {
-            wishlistContainer.getChildren().add(createGameCard("Game Title", "/path/to/image.jpg"));
+        if(wishlist == null || wishlist.isEmpty()) {
+            Label noWishlistLabel = new Label("No games in wishlist.");
+            noWishlistLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
+            wishlistContainer.getChildren().add(noWishlistLabel);
+            return;
+        }
+
+        for (Game game : wishlist) {
+            Long gameID = game.getId();
+            String imageURL = PrimaryController.handler.GetGameCoverImageURL(gameID.toString());
+
+            if(imageURL == null || imageURL.isEmpty()) {
+                imageURL = "placeholder.png"; // Use a default image if none is found
+            }
+            wishlistContainer.getChildren().add(createGameCard(gameID.toString(), imageURL));
         }
     }
 
     private void loadFavorites() {
+        List<Game> favorites = new ArrayList<>();
         try {
-            // Fetch favorite games from the database
-            Connection connection = DBConnectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Favorites where account_username = ?");
-            statement.setString(SessionManager.getCurrentUser().getAccountID(), PrimaryController.username );
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String accountID = resultSet.getString("account_id");
-                String gameID = resultSet.getString("game_id");
-                
-            }
+            // Fetch wishlist data from the database
+            DBConnectionManager.getConnection();
+            List<String> favoriteIDs = PrimaryController.dbConnector.retrieveUserFavorites(PrimaryController.accountID);
+            favorites = PrimaryController.handler.RetrieveWishlist(favoriteIDs);
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
-        
+       
+        if(favorites == null || favorites.isEmpty()) {
+            Label noWishlistLabel = new Label("No games in favorites.");
+            noWishlistLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
+            wishlistContainer.getChildren().add(noWishlistLabel);
+            return;
+        }
+
+        for (Game game : favorites) {
+            Long gameID = game.getId();
+            String imageURL = PrimaryController.handler.GetGameCoverImageURL(gameID.toString());
+
+            if(imageURL == null || imageURL.isEmpty()) {
+                imageURL = "placeholder.png"; // Use a default image if none is found
+            }
+            favoritesContainer.getChildren().add(createGameCard(gameID.toString(), imageURL));
+        }
     }
 
     private void loadReviews() {
         try {
             // Fetch reviews from the database
-            DBConnectionManager.getConnection();
-            statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Reviews");
-            while (resultSet.next()) {
-                String gameTitle = resultSet.getString("game_title");
-                int rating = resultSet.getInt("rating");
-                String comment = resultSet.getString("comment");
-                addReview(gameTitle, rating, comment);
+            List<Review> reviews = PrimaryController.dbConnector.retrieveUserReviews(PrimaryController.accountID);
+            for (Review review : reviews) {
+                Integer id = review.getGameId();
+                String gameID = id.toString();
+                String gameTitle = PrimaryController.handler.RetrieveGameByID(gameID).getName();
+                System.out.println("game title: " + gameTitle);
+                addReview(gameID, gameTitle, review.getRating(), review.getContents());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("Error executing query: " + e.getMessage());
         }
         
@@ -137,13 +163,13 @@ public class ProfileController {
         
     } 
 
-    private VBox createGameCard(String title, String imagePath) {
+    private VBox createGameCard(String id, String imagePath) {
         VBox card = new VBox(10);
         card.setPrefWidth(120);
 
         ImageView imageView = new ImageView();
         try {
-            imageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+            imageView.setImage(new Image(imagePath));
         } catch (Exception e) {
             // If image not found, use a placeholder
             imageView.setImage(new Image(getClass().getResourceAsStream("/placeholder.jpg")));
@@ -153,18 +179,18 @@ public class ProfileController {
         imageView.setFitHeight(160);
         imageView.setPreserveRatio(true);
 
-        Label titleLabel = new Label(title);
+        Label titleLabel = new Label(PrimaryController.handler.RetrieveGameByID(id).getName());
         titleLabel.setWrapText(true);
 
         card.getChildren().addAll(imageView, titleLabel);
 
         // Add click event
-        card.setOnMouseClicked(event -> openGameDetails(title));
+        card.setOnMouseClicked(event -> openGameDetails(id));
 
         return card;
     }
 
-    private void addReview(String gameTitle, int rating, String comment) {
+    private void addReview(String gameID, String gameTitle, int rating, String comment) {
         VBox reviewBox = new VBox(5);
         reviewBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;");
 
@@ -187,7 +213,7 @@ public class ProfileController {
         // Add a link to view the game
         Label viewGameLink = new Label("View Game >");
         viewGameLink.setStyle("-fx-text-fill: blue; -fx-cursor: hand;");
-        viewGameLink.setOnMouseClicked(event -> openGameDetails(gameTitle));
+        viewGameLink.setOnMouseClicked(event -> openGameDetails(gameID));
 
         reviewBox.getChildren().addAll(titleLabel, starsBox, commentLabel, viewGameLink);
         reviewsContainer.getChildren().add(reviewBox);
@@ -216,9 +242,20 @@ public class ProfileController {
         return profileBox;
     }
 
-    private void openGameDetails(String gameTitle) {
+    private void openGameDetails(String gameId) {
         try {
-            App.setRoot("game");
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+            Parent gameView = loader.load();
+
+            // Get the controller
+            IndividualGameController controller = loader.getController();
+
+            // Set the game data (in a real app, you would pass an ID and/or more data)
+            controller.setGameData(gameId, PrimaryController.handler.RetrieveGameByID(gameId).getName());
+
+            // Set the new scene
+            Scene scene = App.getScene();
+            scene.setRoot(gameView);
         } catch (IOException e) {
             System.err.println("Error loading game view: " + e.getMessage());
         }

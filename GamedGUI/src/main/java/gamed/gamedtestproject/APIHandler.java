@@ -185,7 +185,7 @@ public enum APIHandler
 
     public List<Game> RetrieveFeaturedGames() 
     {
-        APICalypse apicalypse = new APICalypse().fields("*").limit(10).sort("rating", Sort.DESCENDING);
+        APICalypse apicalypse = new APICalypse().fields("*").limit(4).sort("rating", Sort.DESCENDING);
         try 
         {
             List<Game> games = ProtoRequestKt.games(wrapper, apicalypse);

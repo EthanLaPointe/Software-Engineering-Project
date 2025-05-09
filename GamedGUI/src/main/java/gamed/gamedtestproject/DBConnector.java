@@ -59,6 +59,33 @@ public enum DBConnector
         }
     }
 
+    public int GetUserIDFromUsername(String username) throws SQLException 
+    {
+        int userID = -1;
+        ResultSet resultSet = null;
+        try 
+        {
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT account_id FROM Accounts WHERE username = '" + username + "'");
+            if (resultSet.next()) 
+            {
+                userID = resultSet.getInt("account_id");
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            if (resultSet != null) 
+            {
+                resultSet.close();
+            }
+        }
+        return userID;
+    }
+
     public String GetUsernameFromID(int userID) throws SQLException 
     {
         String username = null;
@@ -142,7 +169,7 @@ public enum DBConnector
     public ArrayList<String> retrieveUserFavorites(int userID) throws SQLException
     {
         ResultSet resultSet = null;
-        resultSet = retrieveWishlistDB(this.connection, userID);
+        resultSet = retrieveFavoritesDB(this.connection, userID);
 
         ArrayList<String> ids = new ArrayList<>();
         while (resultSet.next()) 
@@ -180,5 +207,71 @@ public enum DBConnector
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static ResultSet retrieveUserReviewsRS(Connection connection, int userID) 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Reviews WHERE account_id = " + userID);
+            return resultSet;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public HashMap<Integer, String> retrieveGameIDs() throws SQLException 
+    {
+        HashMap<Integer, String> gameIDs = new HashMap<>();
+        ResultSet resultSet = null;
+        try 
+        {
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT game_id, title FROM Games");
+            while (resultSet.next()) 
+            {
+                gameIDs.put(resultSet.getInt("game_id"), resultSet.getString("title"));
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            if (resultSet != null) 
+            {
+                resultSet.close();
+            }
+        }
+        return gameIDs;
+    }
+
+    public List<Review> retrieveUserReviews(int userID) 
+    {
+        List<Review> reviews = new ArrayList<>();
+        ResultSet resultSet = null;
+        resultSet = retrieveUserReviewsRS(this.connection, userID);
+
+        try 
+        {
+            while (resultSet.next()) 
+            {
+                Review review = new Review(resultSet.getInt("review_id"),
+                        resultSet.getInt("game_id"),
+                        resultSet.getInt("account_id"),
+                        resultSet.getInt("rating"),
+                        resultSet.getString("contents"));
+                reviews.add(review);
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        return reviews;
     }
 }
