@@ -48,6 +48,7 @@ public class PrimaryController {
     @FXML
     private Label errorMessageLabel;
     public static String username;
+    public static int accountID;
     public static APIHandler handler;
     public static DBConnector dbConnector;
 
@@ -175,6 +176,7 @@ public class PrimaryController {
             System.out.println("Account created for user: " + username);
             rs.close();
             checkStmt.close();
+            accountID = dbConnector.GetUserIDFromUsername(username);
             // Close the dialog
             cancelCreateAccount();
         } catch (SQLException e) {
@@ -228,6 +230,8 @@ public class PrimaryController {
 
                 if (jbcrypt.checkPassword(password, storedHashedPassword)) {
                     System.out.println("Login successful for user: " + username);
+                    accountID = dbConnector.GetUserIDFromUsername(username);
+                    System.out.println("Account ID: " + accountID);
                     Account loggedInAccount = AccountDAO.getAccountByUsername(username);
                     SessionManager.setCurrentUser(loggedInAccount);
                     App.setRoot("secondary");
