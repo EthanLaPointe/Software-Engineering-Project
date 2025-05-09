@@ -24,7 +24,7 @@ public enum DBConnector
             // Load the JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection
-                    ("jdbc:mysql://localhost:3306/gamed_db", "root", "Chaser580558");
+                    ("jdbc:mysql://localhost:3306/gamed_db", "root", "Raznian86");
             System.out.println("Successfully connected");
             //System.out.println("Database connection established.");
         } 
@@ -56,6 +56,20 @@ public enum DBConnector
         catch (SQLException e) 
         {
             System.err.println("Error closing database connection: " + e.getMessage());
+        }
+    }
+
+    public void UpdateUserImagePath(String imagePath, int userID) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            String sql = "UPDATE Accounts SET imagePath = '" + imagePath + "' WHERE account_id = " + userID;
+            statement.executeUpdate(sql);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
         }
     }
 
