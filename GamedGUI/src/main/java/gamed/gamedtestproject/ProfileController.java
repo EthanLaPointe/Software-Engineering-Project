@@ -1,6 +1,7 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Account;
 import model.SessionManager;
+import java.sql.Connection;
 
 public class ProfileController {
 
@@ -43,7 +45,7 @@ public class ProfileController {
         loadWishlist();
         loadFavorites();
         loadReviews();
-        createProfileData();
+        loadProfileData();
     }
 
     @FXML
@@ -80,9 +82,10 @@ public class ProfileController {
     private void loadFavorites() {
         try {
             // Fetch favorite games from the database
-            DBConnectionManager.getConnection();
-            statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM FavGames");
+            Connection connection = DBConnectionManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Favorites where account_username = ?");
+            statement.setString(SessionManager.getCurrentUser().getAccountID(), PrimaryController.username );
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String accountID = resultSet.getString("account_id");
                 String gameID = resultSet.getString("game_id");
@@ -112,14 +115,15 @@ public class ProfileController {
         
     }
      private void loadProfileData() {
-        try {
+        try (Connection connection = DBConnectionManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?")){
             // Fetch profile data from the database
-            DBConnectionManager.getConnection();
-            statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Accounts");
+            statement.setString(1, PrimaryController.username); 
+            resultSet = statement.executeQuery()
+            ;
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
-                usernameLabel.setText(username);
+                usernameLabel.setText(PrimaryController.username);
                 String dateCreated = resultSet.getString("dateCreated");
                 dateCreatedLabel.setText(dateCreated);
                 String profileImagePath = resultSet.getString("profile_image_path");
