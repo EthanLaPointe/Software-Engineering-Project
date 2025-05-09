@@ -1,6 +1,7 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -8,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,6 +21,7 @@ public class SecondaryController {
     @FXML private ImageView profileButton;
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
+
     @FXML private HBox searchResultsContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
@@ -97,7 +98,7 @@ public class SecondaryController {
         searchResultsContainer.setStyle("-fx-background-color: #1A1A1A;");
         // Create game cards for each carousel
         populateFeaturedGames();
-        populateSearchResults(new String[0]);
+        //populateSearchResults(new String[0]);
     }
     
     
@@ -105,51 +106,36 @@ public class SecondaryController {
     {
         List<Game> games = handler.RetrieveFeaturedGames();
         
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < games.size(); i++) 
         {
             Long gameID = games.get(i).getId();
             //String testURL = handler.GetGameImageURL(games.get(i));
-            String imageURL = handler.GetGameImageURL(gameID.toString());
+            String imageURL = handler.GetGameCoverImageURL(gameID.toString());
             System.out.println(imageURL);
             
-            featuredGamesContainer.getChildren().add(createGameCard(games.get(i).getName(), imageURL));
+            featuredGamesContainer.getChildren().add(createGameCard(gameID.toString(), imageURL));
         }
     }
 
-    /*
-    private void populateFeaturedGames() {
-        //TODO Retreive this stuff from database
-        String[] games = {"Game 1", "Game 2", "Game 3", "Game 4", "Game 5"};
-        String[] images = {"/game1.png", "/game2.jpg", "/game3.jpg", "/game4.jpg", "/game5.jpg"};
-        List<Game> gamesL = handler.RetrieveFeaturedGames();
-        
-        for (int i = 0; i < games.length; i++) {
-            featuredGamesContainer.getChildren().add(createGameCard(gamesL.get(i).getName(), images[i]));
-        }
-    }
-        */
-
-    private void populateSearchResults(String[] gameResults) {
+    private void populateSearchResults(List<Game> gameResults) {
         searchResultsContainer.getChildren().clear();
 
-        if (gameResults.length == 0) {
+        if (gameResults.size() == 0) {
             javafx.scene.control.Label noResults = new javafx.scene.control.Label("No search results yet. Try searching for a game!");
             noResults.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
             searchResultsContainer.getChildren().add(noResults);
             return;
         }
 
-        String[] placeholderImages = {"/placeholder.png", "/placeholder.png", "/placeholder.png",
-                "/placeholder.png", "/placeholder.png"};
-
-        for (int i = 0; i < gameResults.length; i++) {
-            String imagePath = i < placeholderImages.length ? placeholderImages[i] : "/placeholder.png";
-            searchResultsContainer.getChildren().add(createGameCard(gameResults[i], imagePath));
+        for (int i = 0; i < gameResults.size(); i++) {
+            Long gameId = gameResults.get(i).getId();
+            String imageURL = handler.GetGameCoverImageURL(gameId.toString());
+            searchResultsContainer.getChildren().add(createGameCard(gameId.toString(), imageURL));
         }
     }
 
 
-    private VBox createGameCard(String title, String imagePath) {
+    private VBox createGameCard(String id, String imagePath) {
         VBox card = new VBox(10);
         card.setPrefWidth(200);
         card.setStyle("-fx-background-color: #444444; -fx-padding: 10; -fx-background-radius: 5;");
@@ -169,15 +155,13 @@ public class SecondaryController {
         VBox.setVgrow(imageView,Priority.ALWAYS);
         card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
-        javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(title);
+        javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
-        titleLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
-        titleLabel.setMaxWidth(180);
         
         card.getChildren().addAll(imageView, titleLabel);
         
         // Add click event
-        card.setOnMouseClicked(event -> openGameDetails(title));
+        card.setOnMouseClicked(event -> openGameDetails(id));
 
         //Make cards move when moused over
         card.setOnMouseEntered(e -> {
@@ -228,26 +212,32 @@ public class SecondaryController {
     private void searchGames() {
         String criteria = searchCriteria.getValue();
         String query = "";
+        List<Game> searchResults = new ArrayList<>();
 
         //Get the appropriate query value based on criteria
         switch (criteria) {
             case "Name":
+                query = searchField.getText();
+                searchResults = handler.SearchGameByName(query);
+                break;
             case "ID":
                 query = searchField.getText();
+                searchResults.add(handler.RetrieveGameByID(query));
                 break;
             case "Genre":
                 query = genreDropdown.getValue();
+                searchResults = handler.SearchGameByGenre(query);
                 break;
             case "Platform":
                 query = platformDropdown.getValue();
+                searchResults = handler.SearchGameByPlatform(query);
                 break;
         }
 
-        String[] mockResults = {"Result 1: " + query, "Result 2: " + query, "Result 3: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query, "Result 4: " + query};
-        populateSearchResults(mockResults);
+        populateSearchResults(searchResults);
     }
     
-    private void openGameDetails(String gameTitle) {
+    private void openGameDetails(String gameId) {
         try {
             // Load the FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
@@ -257,7 +247,7 @@ public class SecondaryController {
             IndividualGameController controller = loader.getController();
 
             // Set the game data (in a real app, you would pass an ID and/or more data)
-            controller.setGameData("game123", gameTitle);
+            controller.setGameData(gameId, handler.RetrieveGameByID(gameId).getName());
 
             // Set the new scene
             Scene scene = App.getScene();

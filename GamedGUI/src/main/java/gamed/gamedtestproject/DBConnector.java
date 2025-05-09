@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import model.Review;
 
 public enum DBConnector 
 {
@@ -55,6 +59,33 @@ public enum DBConnector
         }
     }
 
+    public String GetUsernameFromID(int userID) throws SQLException 
+    {
+        String username = null;
+        ResultSet resultSet = null;
+        try 
+        {
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT username FROM Accounts WHERE account_id = " + userID);
+            if (resultSet.next()) 
+            {
+                username = resultSet.getString("username");
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            if (resultSet != null) 
+            {
+                resultSet.close();
+            }
+        }
+        return username;
+    }
+
     public ArrayList<String> retrieveUserWishlist(int userID) throws SQLException
     {
         ResultSet resultSet = null;
@@ -66,6 +97,31 @@ public enum DBConnector
             ids.add(resultSet.getString("game_id"));
         }
         return ids;
+    }
+
+    public List<Review> RetrieveGameReviews(int gameId)
+    {
+        List<Review> reviews = new ArrayList<>();
+        ResultSet resultSet = null;
+        resultSet = retrieveReviews(this.connection, gameId);
+
+        try 
+        {
+            while (resultSet.next()) 
+            {
+                Review review = new Review(resultSet.getInt("review_id"),
+                        resultSet.getInt("game_id"),
+                        resultSet.getInt("account_id"),
+                        resultSet.getInt("rating"),
+                        resultSet.getString("contents"));
+                reviews.add(review);
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        return reviews;
     }
 
     private static ResultSet retrieveWishlistDB(Connection connection, int userID) 
@@ -111,12 +167,12 @@ public enum DBConnector
         }
     }
 
-    private static ResultSet retrieveReviews(Connection connection, int userID) 
+    private static ResultSet retrieveReviews(Connection connection, int gameID) 
     {
         try 
         {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Reviews WHERE account_id = " + userID);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Reviews WHERE game_id = " + gameID);
             return resultSet;
         } 
         catch (SQLException e) 

@@ -23,7 +23,8 @@ public class ReviewDAO {
                         rs.getInt("review_id"),
                         rs.getInt("game_id"),
                         rs.getInt("account_id"),
-                        rs.getInt("rating")
+                        rs.getInt("rating"),
+                        rs.getString("contents")
                 ));
             }
         } catch (SQLException e) {

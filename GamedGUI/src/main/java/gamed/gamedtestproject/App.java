@@ -1,6 +1,7 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.util.logging.Handler;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,7 @@ import model.Account;
  * JavaFX App
  */
 public class App extends Application {
-
+    
     private static Scene scene;
     @Override
     public void start(Stage stage) throws IOException {

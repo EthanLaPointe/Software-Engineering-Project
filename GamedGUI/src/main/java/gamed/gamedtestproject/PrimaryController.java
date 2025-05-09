@@ -48,10 +48,20 @@ public class PrimaryController {
     @FXML
     private Label errorMessageLabel;
     public static String username;
+    public static APIHandler handler;
+    public static DBConnector dbConnector;
 
 
     @FXML
     public void initialize() {
+
+        dbConnector = DBConnector.INSTANCE;
+
+        handler = APIHandler.INSTANCE;  
+        handler.SetClientID("86hpmu9gws96n5ipkekcq715bq77tj");
+        handler.SetClientSecret("zhmdic84egb7xi2wfwttuwwvq8uiql");
+        handler.Initialize();
+
         try {
             // Load background image with error handling
             Image backgroundImage = new Image(getClass().getResourceAsStream("/background.jpg"));
