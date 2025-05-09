@@ -181,10 +181,11 @@ public class ProfileController {
             if (resultSet.next()) {
                 String username = resultSet.getString("username");
                 String dateCreated = resultSet.getString("dateCreated");
-                dateCreatedLabel.setText(dateCreated);
-                String profileImagePath = resultSet.getString("imagePath");
-                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
-                profileDetailsContainer.getChildren().add(createProfileData(username, dateCreated));
+                 usernameLabel.setText("Username: " + username);
+                dateCreatedLabel.setText("Date Created: " + dateCreated);
+                createProfileData(username, dateCreated);
+            } else {
+                System.err.println("No user data found.");
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
