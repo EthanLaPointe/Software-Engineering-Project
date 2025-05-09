@@ -1,5 +1,6 @@
 package gamed.gamedtestproject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import proto.Game;
+import java.sql.SQLException;
 
 //Controller for the homepage
 public class SecondaryController {
@@ -33,8 +35,20 @@ public class SecondaryController {
     @FXML
     public void initialize() {
         // Set profile image
-        profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
-
+try {
+    String imagePath = PrimaryController.dbConnector.getImagePath(PrimaryController.accountID);
+    System.out.println(imagePath);
+    if (imagePath == null) {
+        profileButton.setImage(new Image("/default_profile.png"));
+    } else {
+        File file = new File(imagePath);
+        profileButton.setImage(imagePath != null ? new Image(file.toURI().toString()) : new Image(getClass().getResourceAsStream("/default_profile.png")));
+        
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+    profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+}
         logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
         searchCriteria.getItems().addAll("Name","Genre","ID","Platform");

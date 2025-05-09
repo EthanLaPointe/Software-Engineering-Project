@@ -51,6 +51,7 @@ public class ProfileController {
 
         try {
             profileImage.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+            
         } catch (Exception e) {
             System.err.println("Error loading default profile image: " + e.getMessage());
         }
@@ -70,20 +71,22 @@ public class ProfileController {
     @FXML
     private void changeProfilePicture() throws IOException {
 
+        String imagePath = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Profile Picture");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
         File selectedFile = fileChooser.showOpenDialog(profileImage.getScene().getWindow());
 
         if (selectedFile != null) {
-            String imagePath = selectedFile.toURI().toString();
+            imagePath = selectedFile.toURI().toString();
             profileImage.setImage(new Image(imagePath));
+            System.out.println(imagePath);
             
         } else {
             showAlert("No file selected", "Please select a valid image file.");
         }
         try {
-            PrimaryController.dbConnector.UpdateUserImagePath(selectedFile.getAbsolutePath(), PrimaryController.accountID);
+            PrimaryController.dbConnector.UpdateUserImagePath(imagePath, PrimaryController.accountID);
         } catch (SQLException e) {
             System.err.println("Error updating user image path: " + e.getMessage());
             showAlert("Database Error", "Failed to update profile picture. Please try again.");
@@ -166,25 +169,29 @@ public class ProfileController {
         
     }
      private void loadProfileData() {
-        try (Connection connection = DBConnectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?")){
-            // Fetch profile data from the database
-            statement.setString(1, PrimaryController.username); 
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+        
+        try{
+            DBConnectionManager.getConnection();
+            String currentUserID = String.valueOf(PrimaryController.accountID);
+            String sql = "SELECT username, dateCreated FROM Accounts WHERE account_id = ?";
+            PreparedStatement preparedStatement = DBConnectionManager.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, currentUserID);  
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
                 String username = resultSet.getString("username");
-                usernameLabel.setText(PrimaryController.username);
                 String dateCreated = resultSet.getString("dateCreated");
-                dateCreatedLabel.setText(dateCreated);
-                String profileImagePath = resultSet.getString("profile_image_path");
-                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
-                profileDetailsContainer.getChildren().add(createProfileData());
+
+                usernameLabel.setText("Username: " + username);
+                dateCreatedLabel.setText("Date Created: " + dateCreated);
+                createProfileData(username, dateCreated);
+            } else {
+                System.err.println("No user data found.");
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error loading profile data: " + e.getMessage());
         }
-        
-        
     } 
 
     private VBox createGameCard(String id, String imagePath) {
@@ -243,7 +250,7 @@ public class ProfileController {
         reviewsContainer.getChildren().add(reviewBox);
     }
 
-    private VBox createProfileData() {
+    private VBox createProfileData(String username, String dateCreated) {
 
         Account currentUser  = SessionManager.getCurrentUser();
 
@@ -252,8 +259,8 @@ public class ProfileController {
             System.err.println("No user is currently logged in.");
             return new VBox(new Label("No user data available"));
         }
-        String username = currentUser.getUsername();
-        String dateCreated = currentUser.getDateCreated();
+        username = currentUser.getUsername();
+        dateCreated = currentUser.getDateCreated();
         //user needs to be able to change this
 
         VBox profileBox = new VBox(10);
