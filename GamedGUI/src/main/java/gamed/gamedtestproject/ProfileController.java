@@ -181,6 +181,7 @@ public class ProfileController {
             if (resultSet.next()) {
                 String username = resultSet.getString("username");
                 String dateCreated = resultSet.getString("dateCreated");
+                usernameLabel.setText(username);
                 dateCreatedLabel.setText(dateCreated);
                 String profileImagePath = resultSet.getString("imagePath");
                 profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));

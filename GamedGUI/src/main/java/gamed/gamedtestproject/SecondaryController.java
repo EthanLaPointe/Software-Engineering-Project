@@ -196,7 +196,15 @@ private void handleSubmitReview() {
         VBox.setVgrow(imageView,Priority.ALWAYS);
         card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
-        javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
+        javafx.scene.control.Label titleLabel = null;
+        if(handler.RetrieveGameByID(id) == null)
+        {
+            titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
+        }
+        else
+        {
+            titleLabel = new javafx.scene.control.Label("Game not found.");
+        }
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
         
         card.getChildren().addAll(imageView, titleLabel);
