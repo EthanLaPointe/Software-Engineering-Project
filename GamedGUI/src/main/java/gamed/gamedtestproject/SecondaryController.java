@@ -2,7 +2,7 @@ package gamed.gamedtestproject;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.classfile.Label;
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
 

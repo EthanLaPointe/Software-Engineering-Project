@@ -37,33 +37,6 @@ public enum DBConnector
             System.err.println("Database connection error: " + e.getMessage());
         }
     }
-    
-    public String getImagePath(int userID) throws SQLException 
-    {
-        String imagePath = null;
-        ResultSet resultSet = null;
-        try 
-        {
-            Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT imagePath FROM Accounts WHERE account_id = " + userID);
-            if (resultSet.next()) 
-            {
-                imagePath = resultSet.getString("imagePath");
-            }
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
-        } 
-        finally 
-        {
-            if (resultSet != null) 
-            {
-                resultSet.close();
-            }
-        }
-        return imagePath;
-    }
 
     public Connection getConnection() 
     {

@@ -50,6 +50,9 @@ public class ProfileController {
         logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
         try {
+            if(PrimaryController.dbConnector.getImagePath(PrimaryController.accountID) != null) {
+                profileImage.setImage(new Image(PrimaryController.dbConnector.getImagePath(PrimaryController.accountID)));
+            } else
             profileImage.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
             
         } catch (Exception e) {
