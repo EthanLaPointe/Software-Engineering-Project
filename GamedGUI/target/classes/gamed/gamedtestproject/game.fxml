@@ -20,7 +20,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="25.0" prefWidth="97.0" text="← Back" />
             <ImageView fitHeight="60.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url('logo.png');" />
-            <Label fx:id="gameTitle" contentDisplay="CENTER" prefHeight="60.0" prefWidth="363.0" style="-fx-background-color: #222222;" text="gametext" textAlignment="CENTER" textFill="WHITE" underline="true">
+            <Label fx:id="gameTitle" contentDisplay="CENTER" prefHeight="60.0" prefWidth="700.0" style="-fx-background-color: #222222;" text="gametext" textAlignment="CENTER" textFill="WHITE" underline="true">
                <font>
                   <Font size="37.0" />
                </font>

@@ -41,7 +41,10 @@ public class Main
         String wishlistFile = "IGDBConnection\\gamedapi\\src\\main\\resources\\Wishlist.csv";
         String favoritesFile = "IGDBConnection\\gamedapi\\src\\main\\resources\\Favorites.csv";
 
-        APIHandler handler = new APIHandler(clientID, clientSecret);
+        APIHandler handler = APIHandler.INSTANCE;
+        handler.SetClientID(clientID);
+        handler.SetClientSecret(clientSecret);
+        handler.Initialize();
 
         int choice = 0;
         Scanner scan = new Scanner(System.in);
@@ -67,7 +70,8 @@ public class Main
                     if (game != null) 
                     {
                         printGameDetails(game);
-                        String imageURL = handler.GetGameImageURL(game);
+                        Long gameId = game.getId();
+                        String imageURL = handler.GetGameCoverImageURL(gameId.toString());
                         String fullImageURL = ImageBuilderKt.imageBuilder(imageURL, ImageSize.COVER_SMALL, ImageType.PNG);
                         System.out.println("Image URL: " + fullImageURL);
                     }
@@ -79,7 +83,7 @@ public class Main
                 case 2:
                     System.out.println("Retrieving games from wishlist...");
                     List<String> wishlistIDs = RetrieveIDList(wishlistFile);
-                    List<Game> wishlist = handler.Retrievelist(wishlistIDs);
+                    List<Game> wishlist = handler.RetrieveWishlist(wishlistIDs);
                     for (Game g : wishlist) 
                     {
                         System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
@@ -100,7 +104,7 @@ public class Main
                 case 4:
                     System.out.println("Retrieving games from favorites...");
                     List<String> favoritesIDs = RetrieveIDList(favoritesFile);
-                    List<Game> favorites = handler.Retrievelist(favoritesIDs);
+                    List<Game> favorites = handler.RetrieveWishlist(favoritesIDs);
                     for (Game g : favorites) 
                     {
                         System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
@@ -149,6 +153,68 @@ public class Main
                 case 8:
                     System.out.println("Access token: " + handler.getAuthToken());
                     break;
+                case 9:
+                    
+                    HttpRequest scRequest = HttpRequest.newBuilder()
+                        .uri(URI.create("https://api.igdb.com/v4/screenshots"))
+                        .header("Client-ID", clientID)
+                        .header("Authorization", "Bearer " + handler.getAuthToken())
+                        .method("POST", HttpRequest.BodyPublishers.ofString("fields image_id; where game = " + "7346" + ";"))
+                        .build();
+                    HttpResponse<String> scResponse = null;
+                    try
+                    {
+                        response = HttpClient.newHttpClient().send(scRequest, HttpResponse.BodyHandlers.ofString());
+                        System.out.println(response.body());
+                        List<String> screenshotUrls = new ArrayList<>();
+                        String body = response.body().trim();
+
+                        // Remove leading and trailing brackets if present.
+                        if (body.startsWith("[") && body.endsWith("]")) {
+                            body = body.substring(1, body.length() - 1);
+                        }
+
+                        // Split the result string by "}," to separate each object
+                        String[] items = body.split("},");
+                        for (String item : items) 
+                        {
+                            // Append closing bracket if it was removed during splitting
+                            if (!item.endsWith("}")) 
+                            {
+                                item = item + "}";
+                            }
+                            // Locate the image_id value
+                            int imageIndex = item.indexOf("image_id");
+                            if (imageIndex != -1) {
+                                int colonIndex = item.indexOf(":", imageIndex);
+                                int firstQuote = item.indexOf("\"", colonIndex);
+                                int secondQuote = item.indexOf("\"", firstQuote + 1);
+                                if (firstQuote != -1 && secondQuote != -1) {
+                                    String imageId = item.substring(firstQuote + 1, secondQuote);
+                                    // Build screenshot URL and add to list  
+                                    screenshotUrls.add("https://images.igdb.com/igdb/image/upload/t_screenshot_big/" + imageId + ".jpg");
+                                    System.out.println("Screenshot URL: " + screenshotUrls.get(screenshotUrls.size() - 1));
+                                }
+                            }
+                        }
+                        //String image_id = response.body().substring(response.body().indexOf("image_id") + 12, response.body().indexOf("}") - 4);
+                    }
+                    catch (InterruptedException | IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 10:
+                    System.out.println("Enter game genre: ");
+                    String genre = scan.next();
+                    System.out.println("Retrieving games by genre...");
+                    List<Game> genreGames = handler.SearchGameByGenre(genre);
+                    for (Game g : genreGames) 
+                    {
+                        System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
+                    }
+                    break;
+                    
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;

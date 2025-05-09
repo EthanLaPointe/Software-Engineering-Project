@@ -9,6 +9,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.text.TextAlignment;
+import model.Review;
+
+import java.util.HashMap;
+import java.util.List;
 
 //Controller to handle individual game scenes
 public class IndividualGameController {
@@ -22,31 +26,36 @@ public class IndividualGameController {
 
     public void setGameData(String gameId, String title) {
         this.currentGameId = gameId;
+        int gameIdInt = Integer.parseInt(gameId);
         this.gameTitle.setText(title);
+        System.out.println("Game ID: " + gameId);
 
-        // Load game data from database
-        loadGameDetails();
-        //loadScreenshots();
-        //loadReviews();
+        loadGameDetails(PrimaryController.handler.GetGameDescription(gameId));
+        loadScreenshots(PrimaryController.handler.GetGameScreenshotURLS(gameId));
+        //System.out.println(PrimaryController.dbConnector.RetrieveGameReviews(gameIdInt));
+        loadReviews(PrimaryController.dbConnector.RetrieveGameReviews(gameIdInt));
     }
 
     @FXML
-    public void initialize() {
-    }
+    public void initialize(){}
 
-    private void loadGameDetails() {
+    private void loadGameDetails(String descText) {
         //load description from database
-        gameDescription.setText("This is a sample description for the game.");
+        gameDescription.setText(descText);
     }
 
-    private void loadScreenshots() {
+    private void loadScreenshots(List<String> screenshots) {
         //Get screenshots from database
-        String[] screenshots = {};
-
+        if(screenshots == null || screenshots.isEmpty()) {
+            Label noScreenshotsLabel = new Label("No screenshots available.");
+            noScreenshotsLabel.setTextAlignment(TextAlignment.CENTER);
+            screenshotsContainer.getChildren().add(noScreenshotsLabel);
+            return;
+        }
         for (String screenshotPath : screenshots) {
             try {
                 ImageView imageView = new ImageView();
-                imageView.setImage(new Image(getClass().getResourceAsStream(screenshotPath)));
+                imageView.setImage(new Image(screenshotPath));
                 imageView.setFitHeight(180);
                 imageView.setFitWidth(320);
                 imageView.setPreserveRatio(true);
@@ -54,9 +63,10 @@ public class IndividualGameController {
                 screenshotsContainer.getChildren().add(imageView);
             } catch (Exception e) {
                 System.out.println("Error loading screenshot: " + screenshotPath);
+                System.out.println(e.getMessage());
                 // Use a placeholder image instead
                 ImageView placeholder = new ImageView();
-                placeholder.setImage(new Image(getClass().getResourceAsStream("/placeholder.jpg")));
+                placeholder.setImage(new Image(getClass().getResourceAsStream("/placeholder.png")));
                 placeholder.setFitHeight(180);
                 placeholder.setFitWidth(320);
 
@@ -65,8 +75,23 @@ public class IndividualGameController {
         }
     }
 
-    private void loadReviews() {
-        //Get reviews from database, check if the user has a review and place that one at the top of the container
+    private void loadReviews(List<Review> reviews) {
+        //Add user review to the top of the container
+        if (reviews == null || reviews.isEmpty()) {
+            Label noReviewsLabel = new Label("No reviews available.");
+            noReviewsLabel.setTextAlignment(TextAlignment.CENTER);
+            reviewsContainer.getChildren().add(noReviewsLabel);
+            return;
+        }
+
+        for (Review review : reviews) {
+            try {
+                String username = PrimaryController.dbConnector.GetUsernameFromID(review.getAccountID());
+                addReview(username, review.getRating(), review.getContents());
+            } catch (Exception e) {
+                System.out.println("Error loading review: " + e.getMessage());
+            }
+        }
     }
 
     private void addReview(String username, int rating, String comment) {
