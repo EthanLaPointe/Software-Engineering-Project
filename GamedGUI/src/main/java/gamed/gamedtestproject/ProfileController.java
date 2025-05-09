@@ -34,7 +34,7 @@ public class ProfileController {
     @FXML private VBox wishlistContainer;
     @FXML private VBox favoritesContainer;
     @FXML private VBox reviewsContainer;
-    @FXML private VBox profileContainer;
+    @FXML private VBox profileDetailsContainer;
     @FXML private ImageView logoImage;
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
@@ -69,21 +69,27 @@ public class ProfileController {
 
     @FXML
     private void changeProfilePicture() throws IOException {
-    // Load FXML for the button
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Profile Picture");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-        File selectedFile = fileChooser.showOpenDialog(profileContainer.getScene().getWindow());
+        File selectedFile = fileChooser.showOpenDialog(profileImage.getScene().getWindow());
 
         if (selectedFile != null) {
-            // Load the selected image
-            Image image = new Image(selectedFile.toURI().toString());
-            profileImage.setImage(image);
-            // Save the image path to the database or perform any other necessary actions
+            String imagePath = selectedFile.toURI().toString();
+            profileImage.setImage(new Image(imagePath));
+            
         } else {
-            showAlert("No File Selected", "Please select a valid image file.");
+            showAlert("No file selected", "Please select a valid image file.");
         }
-  }
+        try {
+            PrimaryController.dbConnector.UpdateUserImagePath(selectedFile.getAbsolutePath(), PrimaryController.accountID);
+        } catch (SQLException e) {
+            System.err.println("Error updating user image path: " + e.getMessage());
+            showAlert("Database Error", "Failed to update profile picture. Please try again.");
+        }
+    }
+  
 
     private void loadWishlist() { 
         List<Game> wishlist = new ArrayList<>();
@@ -172,7 +178,7 @@ public class ProfileController {
                 dateCreatedLabel.setText(dateCreated);
                 String profileImagePath = resultSet.getString("profile_image_path");
                 profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
-                profileContainer.getChildren().add(createProfileData());
+                profileDetailsContainer.getChildren().add(createProfileData());
             }
         } catch (SQLException e) {
             System.err.println("Error executing query: " + e.getMessage());

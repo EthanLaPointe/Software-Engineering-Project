@@ -48,7 +48,7 @@
                         <VBox alignment="CENTER" prefHeight="130.0" prefWidth="150.0">
                            <children>
                               <ImageView fx:id="profileImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                              <Button id="changePicture" mnemonicParsing="false" onAction="#changeProfilePicture" text="Change Picture" />
+                              <Button id="uploadButton" mnemonicParsing="false" onAction="#changeProfilePicture" text="Change Picture" />
                            </children>
                         </VBox>
                         <VBox prefHeight="130.0" prefWidth="500.0" spacing="10.0">
