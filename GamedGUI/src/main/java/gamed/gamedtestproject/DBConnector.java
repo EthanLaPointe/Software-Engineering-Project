@@ -38,6 +38,33 @@ public enum DBConnector
         }
     }
     
+    public String getImagePath(int userID) throws SQLException 
+    {
+        String imagePath = null;
+        ResultSet resultSet = null;
+        try 
+        {
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT imagePath FROM Accounts WHERE account_id = " + userID);
+            if (resultSet.next()) 
+            {
+                imagePath = resultSet.getString("imagePath");
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+            if (resultSet != null) 
+            {
+                resultSet.close();
+            }
+        }
+        return imagePath;
+    }
+
     public Connection getConnection() 
     {
         return this.connection;
@@ -56,20 +83,6 @@ public enum DBConnector
         catch (SQLException e) 
         {
             System.err.println("Error closing database connection: " + e.getMessage());
-        }
-    }
-
-    public void UpdateUserImagePath(String imagePath, int userID) throws SQLException 
-    {
-        try 
-        {
-            Statement statement = connection.createStatement();
-            String sql = "UPDATE Accounts SET imagePath = '" + imagePath + "' WHERE account_id = " + userID;
-            statement.executeUpdate(sql);
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
         }
     }
 
@@ -262,6 +275,20 @@ public enum DBConnector
             }
         }
         return gameIDs;
+    }
+    
+    public void UpdateUserImagePath(String imagePath, int userID) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            String sql = "UPDATE Accounts SET imagePath = '" + imagePath + "' WHERE account_id = " + userID;
+            statement.executeUpdate(sql);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
     }
 
     public List<Review> retrieveUserReviews(int userID) 
