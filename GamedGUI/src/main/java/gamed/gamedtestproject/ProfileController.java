@@ -82,6 +82,15 @@ public class ProfileController {
         } else {
             showAlert("No file selected", "Please select a valid image file.");
         }
+        Connection connection = DBConnectionManager.getConnection();
+        String updateQuery = "INSERT INTO Accounts (imagePath) VALUES (?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+            preparedStatement.setString(1, selectedFile.getAbsolutePath());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating profile image: " + e.getMessage());
+        }
+
     }
   
 
