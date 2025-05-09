@@ -1,6 +1,5 @@
 package gamed.gamedtestproject;
 
-import java.io.IO;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -16,6 +15,8 @@ import javafx.scene.text.TextAlignment;
 import model.Review;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +31,22 @@ public class IndividualGameController {
     @FXML private Button addToWishlistBtn;
     @FXML private Button addToFavoritesBtn;
 
+    // New review components
+    @FXML private HBox ratingStarsContainer;
+    @FXML private Button star1;
+    @FXML private Button star2;
+    @FXML private Button star3;
+    @FXML private Button star4;
+    @FXML private Button star5;
+    @FXML private Label ratingValueLabel;
+    @FXML private TextArea reviewTextField;
+    @FXML private Button submitReviewBtn;
+
     private String currentGameId;
     private boolean isInWishlist = false;
     private boolean isInFavorites = false;
+    private int currentRating = 0;
+    private Button[] starButtons;
 
     public void setGameData(String gameId, String title) {
         this.currentGameId = gameId;
@@ -57,6 +71,53 @@ public class IndividualGameController {
 
         Tooltip favoritesTooltip = new Tooltip("Add this game to your favorites");
         Tooltip.install(addToFavoritesBtn, favoritesTooltip);
+
+        // Initialize star rating buttons
+        starButtons = new Button[]{star1, star2, star3, star4, star5};
+        resetRating();
+    }
+
+    // Handle star rating
+    @FXML
+    private void setRating(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+
+        // Determine which star was clicked
+        int selectedRating = 0;
+        for (int i = 0; i < starButtons.length; i++) {
+            if (clickedButton == starButtons[i]) {
+                selectedRating = i + 1;
+                break;
+            }
+        }
+
+        // If same star is clicked twice, reset rating
+        if (currentRating == selectedRating) {
+            resetRating();
+        } else {
+            // Set the new rating
+            currentRating = selectedRating;
+            updateStarDisplay();
+        }
+    }
+
+    private void resetRating() {
+        currentRating = 0;
+        updateStarDisplay();
+    }
+
+    private void updateStarDisplay() {
+        // Update stars display
+        for (int i = 0; i < starButtons.length; i++) {
+            if (i < currentRating) {
+                starButtons[i].setText("★"); // Filled star
+            } else {
+                starButtons[i].setText("☆"); // Empty star
+            }
+        }
+
+        // Update rating label
+        ratingValueLabel.setText(currentRating + "/5");
     }
 
     private void loadGameDetails(String descText) {
@@ -65,35 +126,78 @@ public class IndividualGameController {
     }
 
     @FXML
-    private void handleSubmitReview()
-    {
+    private void handleSubmitReview() {
+        String reviewText = reviewTextField.getText().trim();
 
+        if (currentRating == 0) {
+            showAlert("Rating Required", "Please select a rating before submitting your review.");
+            return;
+        }
+
+        if (reviewText.isEmpty()) {
+            showAlert("Review Required", "Please write a review before submitting.");
+            return;
+        }
+
+        try {
+            // Get current user ID
+            int accountId = PrimaryController.accountID;
+            int gameId = Integer.parseInt(currentGameId);
+
+            // Submit review to database
+            boolean success = true; //PrimaryController.dbConnector.AddReview(accountId, gameId, currentRating, reviewText);
+
+            if (success) {
+                // Show success message
+                showAlert("Review Submitted", "Your review has been submitted successfully!");
+
+                // Clear the form
+                resetRating();
+                reviewTextField.clear();
+
+                // Refresh reviews
+                loadReviews(PrimaryController.dbConnector.RetrieveGameReviews(gameId));
+            } else {
+                showAlert("Error", "Failed to submit review. Please try again.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error submitting review: " + e.getMessage());
+            showAlert("Error", "An error occurred while submitting your review: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
     private void addToFavorites() throws IOException, SQLException
     {
-        try 
-        {
-            PrimaryController.dbConnector.AddToFavorites(PrimaryController.accountID, currentGameId);
-        } 
-        catch (SQLException e) 
-        {
-            System.out.println("Error adding to favorites: " + e.getMessage());
-        }
+//        try
+//        {
+//            //PrimaryController.dbConnector.AddToFavorites(PrimaryController.accountID, currentGameId);
+//        }
+//        catch (SQLException e)
+//        {
+//            System.out.println("Error adding to favorites: " + e.getMessage());
+//        }
     }
-    
+
     @FXML
     private void addToWishlist() throws IOException, SQLException
     {
-        try
-        {
-            PrimaryController.dbConnector.AddToWishlist(PrimaryController.accountID, currentGameId);
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Error adding to wishlist: " + e.getMessage());
-        }
+//        try
+//        {
+//            PrimaryController.dbConnector.AddToWishlist(PrimaryController.accountID, currentGameId);
+//        }
+//        catch (SQLException e)
+//        {
+//            System.out.println("Error adding to wishlist: " + e.getMessage());
+//        }
     }
 
     private void loadScreenshots(List<String> screenshots) {
@@ -219,35 +323,5 @@ public class IndividualGameController {
         } else {
             addToFavoritesBtn.setText("Add to Favorites");
         }
-    }
-
-    @FXML
-    public void addToWishlist() {
-        // Toggle wishlist status
-        isInWishlist = !isInWishlist;
-
-        // TODO: Actually add/remove from database
-        // if (isInWishlist) {
-        //     PrimaryController.dbConnector.addToWishlist(currentGameId, userId);
-        // } else {
-        //     PrimaryController.dbConnector.removeFromWishlist(currentGameId, userId);
-        // }
-
-        updateWishlistButton();
-    }
-
-    @FXML
-    public void addToFavorites() {
-        // Toggle favorites status
-        isInFavorites = !isInFavorites;
-
-        // TODO: Actually add/remove from database
-        // if (isInFavorites) {
-        //     PrimaryController.dbConnector.addToFavorites(currentGameId, userId);
-        // } else {
-        //     PrimaryController.dbConnector.removeFromFavorites(currentGameId, userId);
-        // }
-
-        updateFavoritesButton();
     }
 }
