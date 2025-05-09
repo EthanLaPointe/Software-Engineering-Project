@@ -15,15 +15,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert; // Ensure Label is imported
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import model.Account;
 import model.Review;
 import proto.Game;
 import model.SessionManager;
 import java.sql.Connection;
+import javafx.fxml.FXMLLoader;
+import java.io.File;
 
 public class ProfileController {
 
@@ -35,6 +39,7 @@ public class ProfileController {
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
     @FXML private Label dateCreatedLabel;
+    
 
     Statement statement;
     ResultSet resultSet;
@@ -53,6 +58,7 @@ public class ProfileController {
         loadFavorites();
         loadReviews();
         loadProfileData();
+
     }
 
     @FXML
@@ -62,9 +68,22 @@ public class ProfileController {
     }
 
     @FXML
-    private void changeProfilePicture() throws IOException{
-        //TODO add logic for uploading images to database
-    }
+    private void changeProfilePicture() throws IOException {
+    // Load FXML for the button
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(profileContainer.getScene().getWindow());
+
+        if (selectedFile != null) {
+            // Load the selected image
+            Image image = new Image(selectedFile.toURI().toString());
+            profileImage.setImage(image);
+            // Save the image path to the database or perform any other necessary actions
+        } else {
+            showAlert("No File Selected", "Please select a valid image file.");
+        }
+  }
 
     private void loadWishlist() { 
         List<Game> wishlist = new ArrayList<>();
@@ -145,8 +164,7 @@ public class ProfileController {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?")){
             // Fetch profile data from the database
             statement.setString(1, PrimaryController.username); 
-            resultSet = statement.executeQuery()
-            ;
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
                 usernameLabel.setText(PrimaryController.username);
