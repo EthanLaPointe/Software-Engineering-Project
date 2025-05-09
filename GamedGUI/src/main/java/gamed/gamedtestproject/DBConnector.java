@@ -24,7 +24,7 @@ public enum DBConnector
             // Load the JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection
-                    ("jdbc:mysql://localhost:3306/gamed_db", "root", "Raznian86");
+                    ("jdbc:mysql://localhost:3306/gamed_db", "root", "Chaser580558");
             System.out.println("Successfully connected");
             //System.out.println("Database connection established.");
         } 

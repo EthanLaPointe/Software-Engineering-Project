@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.ProfileController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -48,7 +48,7 @@
                         <VBox alignment="CENTER" prefHeight="130.0" prefWidth="150.0">
                            <children>
                               <ImageView fx:id="profileImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                              <Button mnemonicParsing="false" onAction="#changeProfilePicture" text="Change Picture" />
+                              <Button id="changePicture" mnemonicParsing="false" onAction="#changeProfilePicture" text="Change Picture" />
                            </children>
                         </VBox>
                         <VBox prefHeight="130.0" prefWidth="500.0" spacing="10.0">

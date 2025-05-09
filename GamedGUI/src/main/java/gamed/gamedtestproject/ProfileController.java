@@ -10,13 +10,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert; // Ensure Label is imported
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import model.Account;
 import model.SessionManager;
 import java.sql.Connection;
+import javafx.fxml.FXMLLoader;
+import java.io.File;
 
 public class ProfileController {
 
@@ -28,6 +32,7 @@ public class ProfileController {
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
     @FXML private Label dateCreatedLabel;
+    
 
     Statement statement;
     ResultSet resultSet;
@@ -46,6 +51,7 @@ public class ProfileController {
         loadFavorites();
         loadReviews();
         loadProfileData();
+
     }
 
     @FXML
@@ -55,9 +61,22 @@ public class ProfileController {
     }
 
     @FXML
-    private void changeProfilePicture() throws IOException{
-        //TODO add logic for uploading images to database
-    }
+    private void changeProfilePicture() throws IOException {
+    // Load FXML for the button
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(profileContainer.getScene().getWindow());
+
+        if (selectedFile != null) {
+            // Load the selected image
+            Image image = new Image(selectedFile.toURI().toString());
+            profileImage.setImage(image);
+            // Save the image path to the database or perform any other necessary actions
+        } else {
+            showAlert("No File Selected", "Please select a valid image file.");
+        }
+  }
 
     private void loadWishlist() { 
         try {
@@ -83,11 +102,11 @@ public class ProfileController {
         try {
             // Fetch favorite games from the database
             Connection connection = DBConnectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Favorites where account_username = ?");
-            statement.setString(SessionManager.getCurrentUser().getAccountID(), PrimaryController.username );
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM FavGames WHERE username = ?");
+            statement.setString(1, PrimaryController.username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String accountID = resultSet.getString("account_id");
+                String name = resultSet.getString("name");
                 String gameID = resultSet.getString("game_id");
                 
             }
@@ -102,7 +121,7 @@ public class ProfileController {
             // Fetch reviews from the database
             DBConnectionManager.getConnection();
             statement = DBConnectionManager.getConnection().createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Reviews");
+            resultSet = statement.executeQuery("SELECT * FROM Reviews WHERE ");
             while (resultSet.next()) {
                 String gameTitle = resultSet.getString("game_title");
                 int rating = resultSet.getInt("rating");
@@ -119,8 +138,7 @@ public class ProfileController {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Accounts WHERE username = ?")){
             // Fetch profile data from the database
             statement.setString(1, PrimaryController.username); 
-            resultSet = statement.executeQuery()
-            ;
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
                 usernameLabel.setText(PrimaryController.username);
