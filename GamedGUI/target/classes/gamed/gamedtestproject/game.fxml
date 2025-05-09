@@ -37,8 +37,8 @@
                   <TextArea fx:id="gameDescription" editable="false" prefHeight="165.0" prefWidth="2197.0" style="-fx-background-color: #222222;" />
                   <VBox fx:id="reviewsContainer" prefHeight="229.0" prefWidth="2197.0" style="-fx-background-color: #222222;">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="81.0" prefWidth="413.0" text="Add to Favorites" />
-                        <Button mnemonicParsing="false" prefHeight="81.0" prefWidth="412.0" text="Add to WishList" />
+                        <Button mnemonicParsing="false" onAction="#addToFavorites" prefHeight="81.0" prefWidth="413.0" text="Add to Favorites" />
+                        <Button mnemonicParsing="false" onAction="#addToWishList" prefHeight="81.0" prefWidth="412.0" text="Add to WishList" />
                      </children></VBox>
                
                </children>
