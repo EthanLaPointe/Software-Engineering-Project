@@ -59,6 +59,22 @@ public enum DBConnector
         }
     }
 
+    public boolean AddReview(int userID, int gameID, int rating, String review) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            String sql = "INSERT INTO Reviews (game_id, account_id, rating, contents) VALUES (" + gameID + ", " + userID + ", " + rating + ", '" + review + "')";
+            statement.executeUpdate(sql);
+            return true;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void AddToFavorites(int userID, String gameID) throws SQLException 
     {
         try 

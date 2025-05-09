@@ -1,6 +1,5 @@
 package gamed.gamedtestproject;
 
-import java.io.IO;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -8,12 +7,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.text.TextAlignment;
 import model.Review;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +23,28 @@ import java.util.List;
 //Controller to handle individual game scenes
 public class IndividualGameController {
 
+    @FXML private Button addToWishlistBtn;
+    @FXML private Button addToFavoritesBtn;
     @FXML private Label gameTitle;
     @FXML private TextArea gameDescription;
     @FXML private HBox screenshotsContainer;
     @FXML private VBox reviewsContainer;
+    @FXML private HBox ratingStarsContainer;
+    @FXML private Button star1;
+    @FXML private Button star2;
+    @FXML private Button star3;
+    @FXML private Button star4;
+    @FXML private Button star5;
+    @FXML private Label ratingValueLabel;
+    @FXML private TextArea reviewTextField;
+    @FXML private Button submitReviewBtn;
 
     private String currentGameId;
+    private boolean isInWishlist = false;
+    private boolean isInFavorites = false;
+    private int currentRating = 0;
+    private Button[] starButtons;
+
 
     public void setGameData(String gameId, String title) {
         this.currentGameId = gameId;
@@ -38,6 +56,13 @@ public class IndividualGameController {
         loadScreenshots(PrimaryController.handler.GetGameScreenshotURLS(gameId));
         //System.out.println(PrimaryController.dbConnector.RetrieveGameReviews(gameIdInt));
         loadReviews(PrimaryController.dbConnector.RetrieveGameReviews(gameIdInt));
+
+         Tooltip favoritesTooltip = new Tooltip("Add this game to your favorites");
+        Tooltip.install(addToFavoritesBtn, favoritesTooltip);
+
+        // Initialize star rating buttons
+        starButtons = new Button[]{star1, star2, star3, star4, star5};
+        resetRating();
     }
 
     @FXML
@@ -49,10 +74,96 @@ public class IndividualGameController {
     }
 
     @FXML
-    private void handleSubmitReview()
-    {
+    private void setRating(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
 
+        // Determine which star was clicked
+        int selectedRating = 0;
+        for (int i = 0; i < starButtons.length; i++) {
+            if (clickedButton == starButtons[i]) {
+                selectedRating = i + 1;
+                break;
+            }
+        }
+
+        // If same star is clicked twice, reset rating
+        if (currentRating == selectedRating) {
+            resetRating();
+        } else {
+            // Set the new rating
+            currentRating = selectedRating;
+            updateStarDisplay();
+        }
     }
+
+    private void resetRating() {
+        currentRating = 0;
+        updateStarDisplay();
+    }
+
+    private void updateStarDisplay() {
+        // Update stars display
+        for (int i = 0; i < starButtons.length; i++) {
+            if (i < currentRating) {
+                starButtons[i].setText("★"); // Filled star
+            } else {
+                starButtons[i].setText("☆"); // Empty star
+            }
+        }
+
+        // Update rating label
+        ratingValueLabel.setText(currentRating + "/5");
+    }
+
+    @FXML
+    private void handleSubmitReview() {
+        String reviewText = reviewTextField.getText().trim();
+
+        if (currentRating == 0) {
+            showAlert("Rating Required", "Please select a rating before submitting your review.");
+            return;
+        }
+
+        if (reviewText.isEmpty()) {
+            showAlert("Review Required", "Please write a review before submitting.");
+            return;
+        }
+
+        try {
+            // Get current user ID
+            int accountId = PrimaryController.accountID;
+            int gameId = Integer.parseInt(currentGameId);
+
+            // Submit review to database
+            boolean success = PrimaryController.dbConnector.AddReview(accountId, gameId, currentRating, reviewText);
+
+            if (success) {
+                // Show success message
+                showAlert("Review Submitted", "Your review has been submitted successfully!");
+
+                // Clear the form
+                resetRating();
+                reviewTextField.clear();
+
+                // Refresh reviews
+                loadReviews(PrimaryController.dbConnector.RetrieveGameReviews(gameId));
+            } else {
+                showAlert("Error", "Failed to submit review. Please try again.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error submitting review: " + e.getMessage());
+            showAlert("Error", "An error occurred while submitting your review: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @FXML
     private void addToFavorites() throws IOException, SQLException
@@ -137,7 +248,7 @@ public class IndividualGameController {
         // Username and star rating in an HBox
         HBox header = new HBox(10);
         Label usernameLabel = new Label(username);
-        usernameLabel.setStyle("-fx-font-weight: bold;");
+        usernameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: gray;");
 
         // Create star rating
         HBox starsBox = new HBox(2);
@@ -151,6 +262,7 @@ public class IndividualGameController {
 
         // Comment
         Label commentLabel = new Label(comment);
+        commentLabel.setStyle("-fx-font-size: 14; -fx-text-fill: black;");
         commentLabel.setWrapText(true);
 
         reviewBox.getChildren().addAll(header, commentLabel);

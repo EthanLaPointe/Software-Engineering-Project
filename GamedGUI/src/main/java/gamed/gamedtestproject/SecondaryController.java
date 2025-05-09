@@ -197,7 +197,7 @@ private void handleSubmitReview() {
         card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
         javafx.scene.control.Label titleLabel = null;
-        if(handler.RetrieveGameByID(id) == null)
+        if(handler.RetrieveGameByID(id) != null)
         {
             titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
         }
@@ -206,6 +206,7 @@ private void handleSubmitReview() {
             titleLabel = new javafx.scene.control.Label("Game not found.");
         }
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+        titleLabel.setMaxWidth(220);
         
         card.getChildren().addAll(imageView, titleLabel);
         
@@ -295,7 +296,7 @@ private void handleSubmitReview() {
             // Get the controller
             IndividualGameController controller = loader.getController();
 
-            // Set the game data (in a real app, you would pass an ID and/or more data)
+            // Set the game data
             controller.setGameData(gameId, handler.RetrieveGameByID(gameId).getName());
 
             // Set the new scene
