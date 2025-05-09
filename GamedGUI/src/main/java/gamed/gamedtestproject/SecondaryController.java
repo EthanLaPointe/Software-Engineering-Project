@@ -9,10 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import proto.Game;
 
 //Controller for the homepage
@@ -22,6 +26,8 @@ public class SecondaryController {
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
 
+    @FXML private TextArea reviewInputArea;
+    @FXML private VBox reviewsContainer;
     @FXML private HBox searchResultsContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
@@ -101,6 +107,25 @@ public class SecondaryController {
         //populateSearchResults(new String[0]);
     }
     
+
+    @FXML
+private void handleSubmitReview() {
+    String reviewText = reviewInputArea.getText().trim();
+    if (reviewText.isEmpty()) {
+        // Optionally alert the user
+        System.out.println("Review is empty.");
+        return;
+    }
+
+    // Display the review (or store it in the database, etc.)
+    Label reviewLabel = new Label(reviewText);
+    reviewLabel.setWrapText(true);
+    reviewLabel.setStyle("-fx-text-fill: white; -fx-background-color: #333; -fx-padding: 10; -fx-background-radius: 5;");
+    
+    reviewsContainer.getChildren().add(reviewLabel);
+
+    reviewInputArea.clear();
+}
     
     private void populateFeaturedGames() 
     {
