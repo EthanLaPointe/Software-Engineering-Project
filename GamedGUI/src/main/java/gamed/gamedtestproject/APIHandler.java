@@ -1,19 +1,16 @@
 package gamed.gamedtestproject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpClient;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.api.igdb.apicalypse.APICalypse;
 import com.api.igdb.apicalypse.Sort;
@@ -21,15 +18,11 @@ import com.api.igdb.exceptions.RequestException;
 import com.api.igdb.request.IGDBWrapper;
 import com.api.igdb.request.ProtoRequestKt;
 import com.api.igdb.request.TwitchAuthenticator;
-import com.api.igdb.utils.ImageBuilderKt;
-import com.api.igdb.utils.ImageSize;
-import com.api.igdb.utils.ImageType;
 import com.api.igdb.utils.TwitchToken;
 
 import proto.Game;
 import proto.Genre;
 import proto.Platform;
-import proto.Cover;
 
 public enum APIHandler 
 {
@@ -694,7 +687,7 @@ public enum APIHandler
         } 
         catch (RequestException e) 
         {
-            System.out.println("Error retrieving wishlist: " + e.getMessage());
+            System.out.println("Error retrieving list: " + e.getMessage());
             return null;
         }
     }
