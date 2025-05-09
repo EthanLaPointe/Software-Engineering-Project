@@ -47,6 +47,7 @@ public class PrimaryController {
     private PasswordField confirmPasswordField;
     @FXML
     private Label errorMessageLabel;
+    public static String username;
 
 
     @FXML
@@ -113,7 +114,7 @@ public class PrimaryController {
     @FXML
     private void createAccount() {
         // Get the input values
-        String username = newUsernameField.getText().trim();
+        username = newUsernameField.getText().trim();
         String password = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
         //Connection connection = null;
