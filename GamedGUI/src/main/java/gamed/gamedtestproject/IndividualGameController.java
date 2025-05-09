@@ -1,6 +1,10 @@
 package gamed.gamedtestproject;
 
+import java.io.IO;
 import java.io.IOException;
+import java.sql.SQLException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -58,6 +62,38 @@ public class IndividualGameController {
     private void loadGameDetails(String descText) {
         //load description from database
         gameDescription.setText(descText);
+    }
+
+    @FXML
+    private void handleSubmitReview()
+    {
+
+    }
+
+    @FXML
+    private void addToFavorites() throws IOException, SQLException
+    {
+        try 
+        {
+            PrimaryController.dbConnector.AddToFavorites(PrimaryController.accountID, currentGameId);
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println("Error adding to favorites: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    private void addToWishlist() throws IOException, SQLException
+    {
+        try
+        {
+            PrimaryController.dbConnector.AddToWishlist(PrimaryController.accountID, currentGameId);
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error adding to wishlist: " + e.getMessage());
+        }
     }
 
     private void loadScreenshots(List<String> screenshots) {

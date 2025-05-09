@@ -1,6 +1,8 @@
 package gamed.gamedtestproject;
 
+import java.io.File;
 import java.io.IOException;
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +11,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import proto.Game;
+import java.sql.SQLException;
 
 //Controller for the homepage
 public class SecondaryController {
@@ -22,6 +29,8 @@ public class SecondaryController {
     @FXML private TextField searchField;
     @FXML private HBox featuredGamesContainer;
 
+    @FXML private TextArea reviewInputArea;
+    @FXML private VBox reviewsContainer;
     @FXML private HBox searchResultsContainer;
     @FXML private ComboBox<String> searchCriteria;
     @FXML private ImageView logoImage;
@@ -33,7 +42,20 @@ public class SecondaryController {
     @FXML
     public void initialize() {
         // Set profile image
-        profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+        try {
+            String imagePath = DBConnector.INSTANCE.getImagePath(PrimaryController.accountID);
+            if(imagePath != null)
+            { // Replace with actual user ID
+                profileButton.setImage(new Image(imagePath));
+            }
+            else
+            {
+                profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+        }
 
         logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
@@ -101,6 +123,25 @@ public class SecondaryController {
         //populateSearchResults(new String[0]);
     }
     
+
+    @FXML
+private void handleSubmitReview() {
+    String reviewText = reviewInputArea.getText().trim();
+    if (reviewText.isEmpty()) {
+        // Optionally alert the user
+        System.out.println("Review is empty.");
+        return;
+    }
+
+    // Display the review (or store it in the database, etc.)
+    Label reviewLabel = new Label(reviewText);
+    reviewLabel.setWrapText(true);
+    reviewLabel.setStyle("-fx-text-fill: white; -fx-background-color: #333; -fx-padding: 10; -fx-background-radius: 5;");
+    
+    reviewsContainer.getChildren().add(reviewLabel);
+
+    reviewInputArea.clear();
+}
     
     private void populateFeaturedGames() 
     {
@@ -155,7 +196,15 @@ public class SecondaryController {
         VBox.setVgrow(imageView,Priority.ALWAYS);
         card.setPrefWidth(Region.USE_COMPUTED_SIZE);
         
-        javafx.scene.control.Label titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
+        javafx.scene.control.Label titleLabel = null;
+        if(handler.RetrieveGameByID(id) == null)
+        {
+            titleLabel = new javafx.scene.control.Label(handler.RetrieveGameByID(id).getName());
+        }
+        else
+        {
+            titleLabel = new javafx.scene.control.Label("Game not found.");
+        }
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
         
         card.getChildren().addAll(imageView, titleLabel);
