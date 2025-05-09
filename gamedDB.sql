@@ -5,10 +5,16 @@ USE Gamed_db;
 CREATE TABLE Accounts
 (
 	account_id int auto_increment primary key,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
-    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    username VARCHAR(128) NOT NULL UNIQUE,
+    password VARCHAR(128) NOT NULL,
+    dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    image_path VARCHAR(255)
 );
+
+
+ALTER TABLE accounts
+ADD COLUMN image_path VARCHAR(255);
+
 
 CREATE TABLE WishLists
 (
@@ -17,6 +23,9 @@ CREATE TABLE WishLists
 	FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 
 );
+
+SELECT * FROM Accounts;
+
 
 CREATE TABLE FavGames
 (
@@ -32,6 +41,8 @@ CREATE TABLE Reviews
     game_id INT,
 	account_id INT,
     rating INT NOT NULL,
-    rating_text VARCHAR(1000),
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );
+
+SELECT * FROM Accounts;
+
