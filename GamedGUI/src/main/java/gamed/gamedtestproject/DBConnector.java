@@ -59,6 +59,36 @@ public enum DBConnector
         }
     }
 
+    public void AddToFavorites(int userID, String gameID) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            int gameIDInt = Integer.parseInt(gameID);
+            String sql = "INSERT INTO FavGames (account_id, game_id) VALUES (" + userID + ", '" + gameIDInt + "')";
+            statement.executeUpdate(sql);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void AddToWishlist(int userID, String gameID) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            int gameIDInt = Integer.parseInt(gameID);
+            String sql = "INSERT INTO WishLists (account_id, game_id) VALUES (" + userID + ", '" + gameIDInt + "')";
+            statement.executeUpdate(sql);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
     public int GetUserIDFromUsername(String username) throws SQLException 
     {
         int userID = -1;
