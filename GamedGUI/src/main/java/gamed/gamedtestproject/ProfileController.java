@@ -82,15 +82,12 @@ public class ProfileController {
         } else {
             showAlert("No file selected", "Please select a valid image file.");
         }
-        Connection connection = DBConnectionManager.getConnection();
-        String updateQuery = "INSERT INTO Accounts (imagePath) VALUES (?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-            preparedStatement.setString(1, selectedFile.getAbsolutePath());
-            preparedStatement.executeUpdate();
+        try {
+            PrimaryController.dbConnector.UpdateUserImagePath(selectedFile.getAbsolutePath(), PrimaryController.accountID);
         } catch (SQLException e) {
-            System.err.println("Error updating profile image: " + e.getMessage());
+            System.err.println("Error updating user image path: " + e.getMessage());
+            showAlert("Database Error", "Failed to update profile picture. Please try again.");
         }
-
     }
   
 

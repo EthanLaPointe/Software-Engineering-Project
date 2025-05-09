@@ -249,6 +249,20 @@ public enum DBConnector
         }
         return gameIDs;
     }
+    
+    public void UpdateUserImagePath(String imagePath, int userID) throws SQLException 
+    {
+        try 
+        {
+            Statement statement = connection.createStatement();
+            String sql = "UPDATE Accounts SET imagePath = '" + imagePath + "' WHERE account_id = " + userID;
+            statement.executeUpdate(sql);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
 
     public List<Review> retrieveUserReviews(int userID) 
     {
