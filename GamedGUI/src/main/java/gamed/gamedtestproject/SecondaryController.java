@@ -2,6 +2,7 @@ package gamed.gamedtestproject;
 
 import java.io.File;
 import java.io.IOException;
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,20 +42,21 @@ public class SecondaryController {
     @FXML
     public void initialize() {
         // Set profile image
-try {
-    String imagePath = PrimaryController.dbConnector.getImagePath(PrimaryController.accountID);
-    System.out.println(imagePath);
-    if (imagePath == null) {
-        profileButton.setImage(new Image("/default_profile.png"));
-    } else {
-        File file = new File(imagePath);
-        profileButton.setImage(imagePath != null ? new Image(file.toURI().toString()) : new Image(getClass().getResourceAsStream("/default_profile.png")));
-        
-    }
-} catch (SQLException e) {
-    e.printStackTrace();
-    profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
-}
+        try {
+            String imagePath = DBConnector.INSTANCE.getImagePath(PrimaryController.accountID);
+            if(imagePath != null)
+            { // Replace with actual user ID
+                profileButton.setImage(new Image(imagePath));
+            }
+            else
+            {
+                profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            profileButton.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
+        }
+
         logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
         searchCriteria.getItems().addAll("Name","Genre","ID","Platform");

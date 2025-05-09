@@ -50,6 +50,9 @@ public class ProfileController {
         logoImage.setImage((new Image(getClass().getResourceAsStream("/logo.png"))));
 
         try {
+            if(PrimaryController.dbConnector.getImagePath(PrimaryController.accountID) != null) {
+                profileImage.setImage(new Image(PrimaryController.dbConnector.getImagePath(PrimaryController.accountID)));
+            } else
             profileImage.setImage(new Image(getClass().getResourceAsStream("/default_profile.png")));
             
         } catch (Exception e) {
@@ -59,7 +62,6 @@ public class ProfileController {
         loadFavorites();
         loadReviews();
         loadProfileData();
-
     }
 
     @FXML
@@ -80,13 +82,18 @@ public class ProfileController {
         if (selectedFile != null) {
             imagePath = selectedFile.toURI().toString();
             profileImage.setImage(new Image(imagePath));
-            System.out.println(imagePath);
+            try {
+            PrimaryController.dbConnector.UpdateUserImagePath(selectedFile.toURI().toString(), PrimaryController.accountID);
+            } catch (SQLException e) {
+                System.err.println("Error updating user image path: " + e.getMessage());
+                showAlert("Database Error", "Failed to update profile picture. Please try again.");
+            }
             
         } else {
             showAlert("No file selected", "Please select a valid image file.");
         }
         try {
-            PrimaryController.dbConnector.UpdateUserImagePath(imagePath, PrimaryController.accountID);
+            PrimaryController.dbConnector.UpdateUserImagePath(selectedFile.getAbsolutePath(), PrimaryController.accountID);
         } catch (SQLException e) {
             System.err.println("Error updating user image path: " + e.getMessage());
             showAlert("Database Error", "Failed to update profile picture. Please try again.");

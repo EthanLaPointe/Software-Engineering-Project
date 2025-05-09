@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -214,7 +215,13 @@ public class Main
                         System.out.println("Game ID: " + g.getId() + ", Name: " + g.getName());
                     }
                     break;
-                    
+                case 11:
+                    System.out.println("Getting all platforms...");
+                    HashMap<Long, String> platforms = handler.getAllPlatforms();
+                    for (Long id : platforms.keySet()) 
+                    {
+                        System.out.println("Platform ID: " + id + ", Name: " + platforms.get(id));
+                    }
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
