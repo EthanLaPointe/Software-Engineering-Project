@@ -6,6 +6,7 @@ module gamed.gamedtestproject {
     requires igdb.api.jvm;
     requires java.net.http;
     requires javafx.base;
+    requires javafx.graphics;
 
     opens gamed.gamedtestproject to javafx.fxml;
     exports gamed.gamedtestproject;

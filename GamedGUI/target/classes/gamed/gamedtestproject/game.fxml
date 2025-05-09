@@ -12,15 +12,12 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.IndividualGameController">
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url('/background.jpg');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamed.gamedtestproject.IndividualGameController">
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 5;" text="← Back" />
             <Button mnemonicParsing="false" onAction="#goBackToHomepage" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 5;" text="← Back" />
             <ImageView fitHeight="60.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url('logo.png');" />
             <Label fx:id="gameTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="700.0" style="-fx-background-color: #222222; -fx-background-radius: 5;" text="Game Title" textAlignment="CENTER" textFill="WHITE" underline="true">
@@ -33,12 +30,7 @@
    </top>
    <center>
       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: transparent; -fx-background: transparent;" BorderPane.alignment="CENTER">
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: transparent; -fx-background: transparent;" BorderPane.alignment="CENTER">
          <content>
-            <VBox alignment="TOP_CENTER" prefWidth="780.0" spacing="20.0" style="-fx-background-color: #222222;">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
             <VBox alignment="TOP_CENTER" prefWidth="780.0" spacing="20.0" style="-fx-background-color: #222222;">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -164,132 +156,9 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <!-- Action Buttons -->
-                  <HBox alignment="CENTER" prefHeight="50.0" spacing="15.0">
-                     <children>
-                        <Button fx:id="addToWishlistBtn" mnemonicParsing="false" onAction="#addToWishlist" prefHeight="40.0" prefWidth="170.0" style="-fx-background-radius: 5;" text="Add to Wishlist" textOverrun="ELLIPSIS">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
-                        </Button>
-                        <Button fx:id="addToFavoritesBtn" mnemonicParsing="false" onAction="#addToFavorites" prefHeight="40.0" prefWidth="170.0" style="-fx-background-radius: 5;" text="Add to Favorites" textOverrun="ELLIPSIS">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-                           </graphic>
-                        </Button>
-                     </children>
-                  </HBox>
-
-                  <!-- Screenshots Section -->
-                  <Label text="Screenshots" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <ScrollPane fitToWidth="true" hbarPolicy="ALWAYS" prefHeight="250.0" vbarPolicy="NEVER" style="-fx-background-color: #333333; -fx-background: #333333;">
-                     <content>
-                        <HBox fx:id="screenshotsContainer" alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 10;">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                     </content>
-                  </ScrollPane>
-
-                  <!-- Description Section -->
-                  <Label text="Description" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <TextArea fx:id="gameDescription" editable="false" prefHeight="120.0" style="-fx-background-color: #333333; -fx-text-fill: #222222; -fx-font-size: 14px;" wrapText="true" />
-
-                  <!-- Add Review Section -->
-                  <Label text="Write a Review" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <VBox spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 15; -fx-background-radius: 5;">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <children>
-                        <!-- Star Rating -->
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <Label text="Rating:" textFill="WHITE">
-                              <font>
-                                 <Font size="14.0" />
-                              </font>
-                           </Label>
-                           <HBox fx:id="ratingStarsContainer" alignment="CENTER_LEFT" spacing="5.0">
-                              <children>
-                                 <Button fx:id="star1" mnemonicParsing="false" onAction="#setRating" style="-fx-background-color: transparent;" text="☆" textFill="GOLD">
-                                    <font>
-                                       <Font size="20.0" />
-                                    </font>
-                                 </Button>
-                                 <Button fx:id="star2" mnemonicParsing="false" onAction="#setRating" style="-fx-background-color: transparent;" text="☆" textFill="GOLD">
-                                    <font>
-                                       <Font size="20.0" />
-                                    </font>
-                                 </Button>
-                                 <Button fx:id="star3" mnemonicParsing="false" onAction="#setRating" style="-fx-background-color: transparent;" text="☆" textFill="GOLD">
-                                    <font>
-                                       <Font size="20.0" />
-                                    </font>
-                                 </Button>
-                                 <Button fx:id="star4" mnemonicParsing="false" onAction="#setRating" style="-fx-background-color: transparent;" text="☆" textFill="GOLD">
-                                    <font>
-                                       <Font size="20.0" />
-                                    </font>
-                                 </Button>
-                                 <Button fx:id="star5" mnemonicParsing="false" onAction="#setRating" style="-fx-background-color: transparent;" text="☆" textFill="GOLD">
-                                    <font>
-                                       <Font size="20.0" />
-                                    </font>
-                                 </Button>
-                              </children>
-                           </HBox>
-                           <Label fx:id="ratingValueLabel" text="0/5" textFill="WHITE">
-                              <font>
-                                 <Font size="14.0" />
-                              </font>
-                           </Label>
-                        </HBox>
-
-                        <!-- Review Text Area -->
-                        <Label text="Your Review:" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="reviewTextField" prefHeight="100.0" prefWidth="200.0" promptText="Write your review here..." wrapText="true" />
-
-                        <!-- Submit Button -->
-                        <HBox alignment="CENTER_RIGHT">
-                           <Button fx:id="submitReviewBtn" mnemonicParsing="false" onAction="#handleSubmitReview" prefHeight="30.0" prefWidth="120.0" style="-fx-background-radius: 5;" text="Submit Review" />
-                        </HBox>
-                     </children>
-                  </VBox>
-
-                  <!-- Reviews Section -->
-                  <Label text="User Reviews" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <VBox fx:id="reviewsContainer" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 10; -fx-background-radius: 5;">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
                </children>
             </VBox>
          </content>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
