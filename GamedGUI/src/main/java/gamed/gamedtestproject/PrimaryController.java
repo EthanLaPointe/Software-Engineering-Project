@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import dao.AccountDAO;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account; // Adjusted to the correct package path for the Account class
+import model.UserSession;
 
 
 
@@ -189,60 +191,60 @@ public class PrimaryController {
     }
 
     //login validation
-    @FXML
-    private void handleLogin() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
-    
-        if (username.isEmpty() || password.isEmpty()) {
-            errorMessageLabel.setText("Username and password are required.");
-            return;
-        }
-    
-        //get password from database
-        try (Connection connection = DBConnectionManager.getConnection();
-             PreparedStatement stmt = connection.prepareStatement("SELECT password FROM accounts WHERE username = ?")) {
-    
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-    
-            if (rs.next()) {
-                String storedHashedPassword = rs.getString("password");
-    
-                if (jbcrypt.checkPassword(password, storedHashedPassword)) {
+   @FXML
+private void handleLogin() {
+    System.out.println("Login clicked!"); 
+    String username = usernameField.getText().trim();
+    String password = passwordField.getText();
+
+    if (username.isEmpty() || password.isEmpty()) {
+        errorMessageLabel.setText("Username and password are required.");
+        return;
+    }
+
+    try (Connection connection = DBConnectionManager.getConnection();
+         PreparedStatement stmt = connection.prepareStatement("SELECT password FROM accounts WHERE username = ?")) {
+
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            String storedHashedPassword = rs.getString("password");
+
+            if (jbcrypt.checkPassword(password, storedHashedPassword)) {
+                // Get full account details
+                Account loggedInAccount = AccountDAO.getAccountByUsername(username);
+
+                if (loggedInAccount != null) {
+                    UserSession.setLoggedInAccount(loggedInAccount); // Save user session
+
                     System.out.println("Login successful for user: " + username);
-                    
-                    //App.setRoot("secondary");
 
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/secondary.fxml"));
-                Parent root = loader.load();
+                    // Load the next screen (secondary.fxml)
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("secondary.fxml"));
+                    Parent root = loader.load();
 
-                ProfileController controller = loader.getController();
-                controller.setUsername(username); // Pass the logged-in username
+                    // Optionally pass data to the controller if needed
+                    // ProfileController controller = loader.getController();
+                    // controller.setUsername(username);
 
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-
-
-                    /* account = new Account(rs.getInt(1));
-                    rs.close();
-                    stmt.close();
-
-                    System.out.println(account); */
-
-
+                    Stage stage = (Stage) usernameField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
                 } else {
-                    errorMessageLabel.setText("Invalid username or password.");
+                    errorMessageLabel.setText("User not found.");
                 }
             } else {
                 errorMessageLabel.setText("Invalid username or password.");
             }
-    
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-            errorMessageLabel.setText("Database error during login.");
+        } else {
+            errorMessageLabel.setText("Invalid username or password.");
         }
+
+    } catch (SQLException | IOException e) {
+        e.printStackTrace();
+        errorMessageLabel.setText("Database error during login.");
     }
+}
 
 }

@@ -41,7 +41,7 @@
       <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
             <!-- User Profile Section -->
-            <VBox fx:id="profileDetailsContainer" maxWidth="700.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: rgba(34, 34, 34, 0.8); -fx-background-radius: 10;">
+            <VBox fx:id="profileContainer" maxWidth="700.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: rgba(34, 34, 34, 0.8); -fx-background-radius: 10;">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="264.0" spacing="20.0">
                      <children>

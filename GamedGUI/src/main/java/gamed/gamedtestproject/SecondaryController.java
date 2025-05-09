@@ -1,6 +1,7 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,7 +10,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 //Controller for the homepage
 public class SecondaryController {
@@ -56,7 +60,7 @@ public class SecondaryController {
             imageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
         } catch (Exception e) {
             // If image not found, use a placeholder
-            imageView.setImage(new Image(getClass().getResourceAsStream("/placeholder.png")));
+            imageView.setImage(new Image(getClass().getResourceAsStream("placeholder.png")));
         }
 
         imageView.setFitWidth(180);

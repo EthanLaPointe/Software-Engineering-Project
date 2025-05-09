@@ -1,21 +1,21 @@
 package gamed.gamedtestproject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 
-import dao.AccountDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView; // Ensure Label is imported
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBox; // Ensure Label is imported
 import model.Account;
+import model.UserSession;
 
 public class ProfileController {
 
@@ -118,17 +118,24 @@ public class ProfileController {
         
     }
 private void loadProfileData() {
-     Account account = AccountDAO.getAccountByUsername(loggedInUsername);
+     //Account account = AccountDAO.getAccountByUsername(loggedInUsername);
 
-    if (account != null) {
-        LocalDate dateCreated = account.getDateCreated();
-        String profileImagePath = "/images/default_profile.png"; // or account.getProfileImagePath();
+     Account loggedInUser = UserSession.getLoggedInAccount();
 
-        VBox profileBox = createProfileData(account.getUsername(), dateCreated, profileImagePath);
-        profileContainer.getChildren().add(profileBox);
-    } else {
-        System.out.println("Account not found for username: " + loggedInUsername);
+    if (loggedInUser == null) {
+        System.out.println("No user is logged in.");
+        return;
     }
+
+    String date = loggedInUser.getDateCreated().toString();
+    System.out.println("Image path from user: " + loggedInUser.getImagePath());
+    VBox profileDataBox = createProfileData(
+    loggedInUser.getUsername(),
+    date,
+    loggedInUser.getImagePath() // assuming this method exists
+);
+
+    profileContainer.getChildren().add(profileDataBox);
 }
 
     private VBox createGameCard(String title, String imagePath) {
@@ -187,13 +194,30 @@ private void loadProfileData() {
         reviewsContainer.getChildren().add(reviewBox);
     }
 
-private VBox createProfileData(String username, LocalDate dateCreated, String profileImagePath) {
+private VBox createProfileData(String username, String dateCreated, String profileImagePath) {
     VBox profileBox = new VBox(10);
     profileBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;");
 
     Label usernameLabel = new Label("Username: " + username);
     Label dateCreatedLabel = new Label("Date Created: " + dateCreated);
     ImageView profileImageView = new ImageView(new Image(getClass().getResourceAsStream(profileImagePath)));
+
+    InputStream stream = getClass().getResourceAsStream("/placeholder.png");
+    System.out.println("Stream: " + stream);
+    if (stream == null) {
+    throw new RuntimeException("Image not found: /placeholder.png");
+}
+    Image image = new Image(stream);
+
+     //Image image;
+    if (profileImagePath == null || getClass().getResourceAsStream(profileImagePath) == null) {
+        System.out.println("Profile image path is invalid or missing: " + profileImagePath);
+        image = new Image(getClass().getResourceAsStream("/placeholder.png"));
+    } else {
+        image = new Image(getClass().getResourceAsStream(profileImagePath));
+    }
+
+    //ImageView profileImageView = new ImageView(image);
 
     profileBox.getChildren().addAll(usernameLabel, dateCreatedLabel, profileImageView);
     return profileBox;
